@@ -45,7 +45,7 @@ public class FileInfo {
     @Column(name = Columns.CREATION_TIME)
     private Long creationTimeMS;
 
-    public FileInfo(String path, String name, long size, Long modificationTimeMS, Long creationTimeMS) {
+    public FileInfo(String path, String name, Long size, Long modificationTimeMS, Long creationTimeMS) {
         this.path = path;
         this.name = name; // TODO: extract name from path
         this.size = size;
@@ -83,7 +83,7 @@ public class FileInfo {
         return path;
     }
 
-    public long getSize() {
+    public Long getSize() {
         return size;
     }
 
