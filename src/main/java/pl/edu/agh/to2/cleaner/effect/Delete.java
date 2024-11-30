@@ -21,7 +21,7 @@ public class Delete implements IOSideEffect {
     @Override
     public void apply() throws IOException {
         for (FileInfo file : files) {
-            Files.delete(file.getPath());
+            Files.delete(file.toPath());
         }
     }
 

@@ -1,55 +1,97 @@
 package pl.edu.agh.to2.cleaner.model;
 
+import jakarta.persistence.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
+import java.util.concurrent.TimeUnit;
 
+@Entity
+@Table(name = FileInfo.TABLE_NAME)
 public class FileInfo {
-    private String name;
-    private Path path;
-    private long size;
-    private FileTime modificationTime;
-    private FileTime creationTime;
+    public static final String TABLE_NAME = "file_info";
 
-    public FileInfo(String name, String path, long size, FileTime modificationTime, FileTime creationTime) {
-        this.path = Paths.get(path);
+    public static class Columns {
+        public static final String ID = "id";
+        public static final String NAME = "name";
+        public static final String PATH = "path";
+        public static final String SIZE = "size";
+        public static final String MODIFICATION_TIME = "modification_time";
+        public static final String CREATION_TIME = "creation_time";
+
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = Columns.ID)
+    private Long id;
+
+    @Column(name = Columns.NAME, nullable = false /*, length = 255, unique = false <-- default */)
+    private String name;
+
+    @Column(name = Columns.PATH, nullable = false, unique = true)
+    private String path;
+
+    @Column(name = Columns.SIZE, nullable = false)
+    private Long size;
+
+    @Column(name = Columns.MODIFICATION_TIME)
+    private Long modificationTimeMS;
+
+    @Column(name = Columns.CREATION_TIME)
+    private Long creationTimeMS;
+
+    public FileInfo(String path, String name, Long size, Long modificationTimeMS, Long creationTimeMS) {
+        this.path = path;
         this.name = name; // TODO: extract name from path
         this.size = size;
-        this.modificationTime = modificationTime;
-        this.creationTime = creationTime;
+        this.modificationTimeMS = modificationTimeMS;
+        this.creationTimeMS = creationTimeMS;
+
+        // extracting name from path
+//        File file = new File(path);
+//        String extractedName = file.getName();
     }
 
     public FileInfo(File file) throws IOException {
-        this.path = file.toPath();
+        this.path = file.toPath().toString();
         this.name = file.getName();
         this.size = file.length();
         BasicFileAttributes attr =
                 Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-        this.modificationTime = attr.lastModifiedTime();
-        this.creationTime = attr.creationTime();
+        this.modificationTimeMS = attr.lastModifiedTime().to(TimeUnit.MILLISECONDS);
+        this.creationTimeMS = attr.creationTime().to(TimeUnit.MILLISECONDS);
+    }
+
+    public FileInfo() {
+
     }
 
     public String getName() {
         return name;
     }
 
-    public Path getPath() {
+    public Path toPath() {
+        return Paths.get(path);
+    }
+
+    public String getPath() {
         return path;
     }
 
-    public long getSize() {
+    public Long getSize() {
         return size;
     }
 
-    public FileTime getModificationTime() {
-        return modificationTime;
+    public Long getModificationTimeMS() {
+        return modificationTimeMS;
     }
 
-    public FileTime getCreationTime() {
-        return creationTime;
+    public Long getCreationTimeMS() {
+        return creationTimeMS;
     }
 }
