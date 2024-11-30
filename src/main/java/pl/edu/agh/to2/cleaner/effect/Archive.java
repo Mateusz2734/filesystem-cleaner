@@ -56,6 +56,7 @@ public class Archive implements IOSideEffect {
         } catch (IOException e) {
             // TODO: handle exception
             e.printStackTrace();
+            System.out.println("Failed to archive the files.");
         }
 
     }

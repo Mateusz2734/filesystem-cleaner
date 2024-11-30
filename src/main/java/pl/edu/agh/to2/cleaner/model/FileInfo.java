@@ -21,6 +21,10 @@ public class FileInfo {
         this.size = size;
         this.modificationTime = modificationTime;
         this.creationTime = creationTime;
+
+        // extracting name from path
+//        File file = new File(path);
+//        String extractedName = file.getName();
     }
 
     public FileInfo(File file) throws IOException {

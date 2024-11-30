@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
+import pl.edu.agh.to2.cleaner.effect.Move;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 import pl.edu.agh.to2.cleaner.effect.Archive;
 
@@ -62,27 +63,45 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 //		Application.launch(App.class);
 		// TODO: Make this path configurable
-		String pathStr = "C:\\USERS\\MATEU\\PYCHARMPROJECTS\\TO-PROJEKT\\TESTDIR";
+		String pathStr = "C:\\Users\\mikol\\Documents\\test_folder\\test_folder_inner";
 
 		Path dir = Paths.get(pathStr);
 		Files.walk(dir).forEach(path -> showFile(path.toFile()));
 
-		List<FileInfo> filesToArchive = Files.walk(dir).map(Path::toFile).filter(file -> !file.isDirectory()).map(file -> {
-            try {
-                return new FileInfo(file);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).limit(2).toList() /* OR: collect(Collectors.toList()) */;
 
-		// WYPISZ, JAKIE PLIKI BEDA ZARCHIWIZOWANE
-		filesToArchive.forEach(fileInfo -> System.out.println("zip <- " + fileInfo.getName()));
+		// ARCHIVE DEMO
+//		List<FileInfo> filesToArchive = Files.walk(dir).map(Path::toFile).filter(file -> !file.isDirectory()).map(file -> {
+//            try {
+//                return new FileInfo(file);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }).limit(2).toList() /* OR: collect(Collectors.toList()) */;
+//
+//		// wypisz, jakie pliki beda archiwizowane
+//		filesToArchive.forEach(fileInfo -> System.out.println("zip <- " + fileInfo.getName()));
+//
+//		Archive archive = new Archive(filesToArchive, pathStr);
+//		archive.apply();
+//
+//		// zobaczmy, co sie zmienilo
+//		Files.walk(dir).forEach(path -> showFile(path.toFile()));
 
-		Archive archive = new Archive(filesToArchive, pathStr);
-		archive.apply();
-
-		// zobaczmy, co sie zmienilo
-		Files.walk(dir).forEach(path -> showFile(path.toFile()));
-
+		// MOVE DEMO
+//		List<FileInfo> filesToMove = Files.walk(dir).map(Path::toFile).filter(file -> !file.isDirectory()).map(file -> {
+//			try {
+//				return new FileInfo(file);
+//			} catch (IOException e) {
+//				throw new RuntimeException(e);
+//			}
+//		}).limit(2).toList();
+//
+//		filesToMove.forEach(fileInfo -> System.out.println("(moved) <- " + fileInfo.getName()));
+//
+//		String moveDestStr = pathStr + "\\moved";
+//		Move move = new Move(filesToMove, moveDestStr);
+//		move.apply();
+//
+//		Files.walk(dir).forEach(path -> showFile(path.toFile()));
 	}
 }
