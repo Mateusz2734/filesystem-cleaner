@@ -32,7 +32,7 @@ public class Archive implements IOSideEffect {
         try (final FileOutputStream fos = new FileOutputStream(directoryPathToCreateZipInside + "/compressed.zip")) {
             ZipOutputStream zipOut = new ZipOutputStream(fos);
             for (FileInfo fileInfo : files) {
-                File fileToZip = new File(fileInfo.getPath().toString());
+                File fileToZip = new File(fileInfo.toPath().toString());
 
                 FileInputStream fis = new FileInputStream(fileToZip);
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
@@ -50,7 +50,7 @@ public class Archive implements IOSideEffect {
                     zipOut.write(bytes, 0, length);
                 }
                 fis.close();
-                Files.delete(fileInfo.getPath());
+                Files.delete(fileInfo.toPath());
             }
             zipOut.close();
         } catch (IOException e) {

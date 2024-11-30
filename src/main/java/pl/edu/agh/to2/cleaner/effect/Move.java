@@ -29,7 +29,7 @@ public class Move implements IOSideEffect {
     public void apply() {
         try {
             for (FileInfo fileInfo : filesToMove) {
-                File fileToMove = new File(fileInfo.getPath().toString());
+                File fileToMove = new File(fileInfo.toPath().toString());
 
                 Path src = fileToMove.toPath();
 

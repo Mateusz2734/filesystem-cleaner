@@ -10,11 +10,21 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import pl.edu.agh.to2.cleaner.dao.FileInfoDao;
 import pl.edu.agh.to2.cleaner.effect.Move;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 import pl.edu.agh.to2.cleaner.effect.Archive;
+import pl.edu.agh.to2.cleaner.repository.FileInfoRepository;
+import pl.edu.agh.to2.cleaner.session.SessionService;
+import pl.edu.agh.to2.cleaner.session.TransactionService;
 
 import java.io.File;
 
@@ -25,7 +35,7 @@ public class Main {
 	private static final DateTimeFormatter DATE_FORMATTER =
 			DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-	public static String formatDateTime(FileTime fileTime) {
+	private static String formatDateTime(FileTime fileTime) {
 
 		LocalDateTime localDateTime = fileTime
 				.toInstant()
@@ -35,7 +45,29 @@ public class Main {
 		return localDateTime.format(DATE_FORMATTER);
 	}
 
-	public static void showFile(File file) {
+	private static final SessionService sessionService = new SessionService();
+	private static final FileInfoDao fileInfoDao = new FileInfoDao(sessionService);
+	private static final FileInfoRepository fileInfoRepository = new FileInfoRepository(fileInfoDao);
+	private static void addFileToDB(FileInfo fileInfo) {
+		sessionService.openSession();
+
+		Optional<FileInfo> existingFileInfo = fileInfoRepository.findAll().stream()
+				.filter(existing -> existing.getPath().equals(fileInfo.getPath()))
+				.findFirst();
+
+		if (existingFileInfo.isEmpty()) {
+			var createdFileInfoRecord = fileInfoDao.create(
+					fileInfo.getPath(),
+					fileInfo.getName(),
+					fileInfo.getSize(),
+					fileInfo.getModificationTimeMS(),
+					fileInfo.getCreationTimeMS()
+			);
+		}
+		sessionService.closeSession();
+	}
+
+	private static void showFile(File file) {
 		if (file.isDirectory()) {
 			System.out.println("Directory: " + file.getAbsolutePath());
 		} else {
@@ -53,10 +85,11 @@ public class Main {
 				String modifiedPrint = formatDateTime(fileTimeModified);
 				System.out.println("File: " + file.getAbsolutePath() + " | Extension: " + FilenameUtils.getExtension(file.getAbsolutePath()) + " | " + file.length() + " B" + " | " + createdPrint + " | " + modifiedPrint);
 
+				// ADD FILE TO DB
+				addFileToDB(new FileInfo(file));
 			} catch (IOException e) {
 				System.err.println("Cannot get the last modified time - " + e);
 			}
-			// TODO: logika dodawania pliku do bazy danych
 		}
 	}
 
@@ -65,9 +98,12 @@ public class Main {
 		// TODO: Make this path configurable
 		String pathStr = "C:\\Users\\mikol\\Documents\\test_folder\\test_folder_inner";
 
+//		setUp();
+
 		Path dir = Paths.get(pathStr);
 		Files.walk(dir).forEach(path -> showFile(path.toFile()));
 
+		sessionService.close();
 
 		// ARCHIVE DEMO
 //		List<FileInfo> filesToArchive = Files.walk(dir).map(Path::toFile).filter(file -> !file.isDirectory()).map(file -> {
@@ -103,5 +139,9 @@ public class Main {
 //		move.apply();
 //
 //		Files.walk(dir).forEach(path -> showFile(path.toFile()));
+
+
+
+
 	}
 }
