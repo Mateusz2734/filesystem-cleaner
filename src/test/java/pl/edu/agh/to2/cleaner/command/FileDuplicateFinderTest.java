@@ -12,9 +12,9 @@ class FileDuplicateFinderTest {
 
     @Test
     void testDuplicateFiles() {
-        FileInfo file1 = new FileInfo("file1", "", 100, null, null);
-        FileInfo file2 = new FileInfo("file1", "", 100, null, null); // Duplicate of file1
-        FileInfo file3 = new FileInfo("file2", "", 200, null, null);
+        FileInfo file1 = new FileInfo("", "file1", 100L, null, null);
+        FileInfo file2 = new FileInfo("", "file1", 100L, null, null); // Duplicate of file1
+        FileInfo file3 = new FileInfo("", "file2", 200L, null, null);
 
         FileDuplicateFinder finder = new FileDuplicateFinder(List.of(file1, file2, file3));
 
@@ -26,9 +26,9 @@ class FileDuplicateFinderTest {
 
     @Test
     void testNoDuplicates() {
-        FileInfo file1 = new FileInfo("file1", "", 100, null, null);
-        FileInfo file2 = new FileInfo("file2", "", 200, null, null);
-        FileInfo file3 = new FileInfo("file3", "", 300, null, null);
+        FileInfo file1 = new FileInfo("", "file1", 100L, null, null);
+        FileInfo file2 = new FileInfo("", "file2", 200L, null, null);
+        FileInfo file3 = new FileInfo("", "file3", 300L, null, null);
 
         FileDuplicateFinder finder = new FileDuplicateFinder(List.of(file1, file2, file3));
 
@@ -47,7 +47,7 @@ class FileDuplicateFinderTest {
 
     @Test
     void testSingleFile() {
-        FileInfo file1 = new FileInfo("single_file", "", 100, null, null);
+        FileInfo file1 = new FileInfo("", "single_file", 100L, null, null);
 
         FileDuplicateFinder finder = new FileDuplicateFinder(List.of(file1));
 
@@ -58,9 +58,9 @@ class FileDuplicateFinderTest {
 
     @Test
     void testPartialMatch() {
-        FileInfo file1 = new FileInfo("file1", "", 100, null, null);
-        FileInfo file2 = new FileInfo("file1", "", 200, null, null); // Same name, different size
-        FileInfo file3 = new FileInfo("file2", "", 100, null, null); // Same size, different name
+        FileInfo file1 = new FileInfo("", "file1", 100L, null, null);
+        FileInfo file2 = new FileInfo("", "file1", 200L, null, null); // Same name, different size
+        FileInfo file3 = new FileInfo("", "file2", 100L, null, null); // Same size, different name
 
         FileDuplicateFinder finder = new FileDuplicateFinder(List.of(file1, file2, file3));
 

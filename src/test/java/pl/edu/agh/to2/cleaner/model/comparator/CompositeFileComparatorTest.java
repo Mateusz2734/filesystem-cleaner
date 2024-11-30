@@ -13,8 +13,8 @@ class CompositeFileComparatorTest {
     void testAllMatchTrueWithRequireAll() {
         CompositeFileComparator comparator = new CompositeFileComparator(List.of(new AlwaysTrueComparator(), new AlwaysTrueComparator()), true);
 
-        var file1 = new FileInfo("file1", "./file1", 100, null, null);
-        var file2 = new FileInfo("file2", "./file2", 200, null, null);
+        var file1 = new FileInfo("./file1", "file1", null, null, null);
+        var file2 = new FileInfo("./file2", "file2", null, null, null);
 
         assertTrue(comparator.compare(file1, file2));
     }
@@ -23,8 +23,8 @@ class CompositeFileComparatorTest {
     void testOneMatchFalseWithRequireAll() {
         CompositeFileComparator comparator = new CompositeFileComparator(List.of(new AlwaysTrueComparator(), new AlwaysFalseComparator()), true);
 
-        var file1 = new FileInfo("file1", "./file1", 100, null, null);
-        var file2 = new FileInfo("file2", "./file2", 200, null, null);
+        var file1 = new FileInfo("./file1", "file1", null, null, null);
+        var file2 = new FileInfo("./file2", "file2", null, null, null);
 
         assertFalse(comparator.compare(file1, file2));
     }
@@ -33,8 +33,8 @@ class CompositeFileComparatorTest {
     void testAtLeastOneMatchTrueWithRequireAny() {
         CompositeFileComparator comparator = new CompositeFileComparator(List.of(new AlwaysFalseComparator(), new AlwaysTrueComparator()), false);
 
-        var file1 = new FileInfo("file1", "./file1", 100, null, null);
-        var file2 = new FileInfo("file2", "./file2", 200, null, null);
+        var file1 = new FileInfo("./file1", "file1", null, null, null);
+        var file2 = new FileInfo("./file2", "file2", null, null, null);
 
         assertTrue(comparator.compare(file1, file2));
     }
@@ -43,8 +43,8 @@ class CompositeFileComparatorTest {
     void testNoMatchWithRequireAny() {
         CompositeFileComparator comparator = new CompositeFileComparator(List.of(new AlwaysFalseComparator(), new AlwaysFalseComparator()), false);
 
-        var file1 = new FileInfo("file1", "./file1", 100, null, null);
-        var file2 = new FileInfo("file2", "./file2", 200, null, null);
+        var file1 = new FileInfo("./file1", "file1", null, null, null);
+        var file2 = new FileInfo("./file2", "file2", null, null, null);
 
         assertFalse(comparator.compare(file1, file2));
     }
@@ -53,8 +53,8 @@ class CompositeFileComparatorTest {
     void testEmptyComparatorListWithRequireAll() {
         CompositeFileComparator comparator = new CompositeFileComparator(List.of(), true);
 
-        var file1 = new FileInfo("file1", "./file1", 100, null, null);
-        var file2 = new FileInfo("file2", "./file2", 200, null, null);
+        var file1 = new FileInfo("./file1", "file1", null, null, null);
+        var file2 = new FileInfo("./file2", "file2", null, null, null);
 
         assertTrue(comparator.compare(file1, file2));
     }
@@ -63,8 +63,8 @@ class CompositeFileComparatorTest {
     void testEmptyComparatorListWithRequireAny() {
         CompositeFileComparator comparator = new CompositeFileComparator(List.of(), false);
 
-        var file1 = new FileInfo("file1", "./file1", 100, null, null);
-        var file2 = new FileInfo("file2", "./file2", 200, null, null);
+        var file1 = new FileInfo("./file1", "file1", null, null, null);
+        var file2 = new FileInfo("./file2", "file2", null, null, null);
 
         assertFalse(comparator.compare(file1, file2));
     }

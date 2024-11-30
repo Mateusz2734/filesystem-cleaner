@@ -11,9 +11,9 @@ class FileVersionsFinderTest {
 
     @Test
     void testDefaultComparator() {
-        FileInfo file1 = new FileInfo("doc_v01", "", 100, null, null);
-        FileInfo file2 = new FileInfo("doc_v02", "", 100, null, null);
-        FileInfo file3 = new FileInfo("other_file", "", 200, null, null);
+        FileInfo file1 = new FileInfo("", "doc_v01", 100L, null, null);
+        FileInfo file2 = new FileInfo("", "doc_v02", 100L, null, null);
+        FileInfo file3 = new FileInfo("", "other_file", 200L, null, null);
 
         FileVersionsFinder finder = new FileVersionsFinder(List.of(file1, file2, file3));
 
@@ -25,9 +25,9 @@ class FileVersionsFinderTest {
 
     @Test
     void testCustomThresholdComparator() {
-        FileInfo file1 = new FileInfo("document_v1", "", 100, null, null);
-        FileInfo file2 = new FileInfo("document_v2", "", 100, null, null);
-        FileInfo file3 = new FileInfo("other_file", "", 200, null, null);
+        FileInfo file1 = new FileInfo("", "document_v1", 100L, null, null);
+        FileInfo file2 = new FileInfo("", "document_v2", 100L, null, null);
+        FileInfo file3 = new FileInfo("", "other_file", 200L, null, null);
 
         FileVersionsFinder finder = new FileVersionsFinder(List.of(file1, file2, file3), 0.9);
 
@@ -46,7 +46,7 @@ class FileVersionsFinderTest {
 
     @Test
     void testSingleFile() {
-        FileInfo file1 = new FileInfo("single_file", "", 100, null, null);
+        FileInfo file1 = new FileInfo("", "single_file", 100L, null, null);
         FileVersionsFinder finder = new FileVersionsFinder(List.of(file1));
         List<ImmutablePair<FileInfo, FileInfo>> pairs = finder.find();
         assertTrue(pairs.isEmpty());
@@ -54,9 +54,9 @@ class FileVersionsFinderTest {
 
     @Test
     void testNoMatches() {
-        FileInfo file1 = new FileInfo("file1", "", 100, null, null);
-        FileInfo file2 = new FileInfo("file2", "", 100, null, null);
-        FileInfo file3 = new FileInfo("other_file", "", 100, null, null);
+        FileInfo file1 = new FileInfo("", "file1", 100L, null, null);
+        FileInfo file2 = new FileInfo("", "file2", 100L, null, null);
+        FileInfo file3 = new FileInfo("", "other_file", 100L, null, null);
 
         FileVersionsFinder finder = new FileVersionsFinder(List.of(file1, file2, file3));
         List<ImmutablePair<FileInfo, FileInfo>> pairs = finder.find();

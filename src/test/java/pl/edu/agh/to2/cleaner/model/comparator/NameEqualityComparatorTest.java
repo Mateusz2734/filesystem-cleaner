@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class NameEqualityComparatorTest {
     @Test
     void compare_withSameName() {
-        var file1 = new FileInfo("file1", "./file1", 100, null, null);
-        var file2 = new FileInfo("file1", "./file2", 100, null, null);
+        var file1 = new FileInfo("./file1", "file1", null, null, null);
+        var file2 = new FileInfo("./file2", "file1", null, null, null);
 
         var comparator = new NameEqualityComparator();
         assertTrue(comparator.compare(file1, file2));
@@ -18,8 +18,8 @@ public class NameEqualityComparatorTest {
 
     @Test
     void compare_withDifferentNames() {
-        var file1 = new FileInfo("file1", "./file1", 100, null, null);
-        var file2 = new FileInfo("file2", "./file2", 100, null, null);
+        var file1 = new FileInfo("./file1", "file1", null, null, null);
+        var file2 = new FileInfo("./file2", "file2", null, null, null);
 
         var comparator = new NameEqualityComparator();
         assertFalse(comparator.compare(file1, file2));
@@ -27,8 +27,8 @@ public class NameEqualityComparatorTest {
 
     @Test
     void compare_withEmptyNames() {
-        var file1 = new FileInfo("", "./file1", 100, null, null);
-        var file2 = new FileInfo("", "./file2", 100, null, null);
+        var file1 = new FileInfo("./file1", "", null, null, null);
+        var file2 = new FileInfo("./file2", "", null, null, null);
 
         var comparator = new NameEqualityComparator();
         assertTrue(comparator.compare(file1, file2));

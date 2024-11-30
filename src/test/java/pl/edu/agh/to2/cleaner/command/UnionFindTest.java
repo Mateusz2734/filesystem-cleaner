@@ -15,11 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UnionFindTest {
     @Test
     void connectedComponentsFromEdges_singleConnection() {
-        var update = FileTime.from(Instant.now());
-        var create = FileTime.from(Instant.now().minusMillis(10));
+        var update = FileTime.from(Instant.now()).toMillis();
+        var create = FileTime.from(Instant.now().minusMillis(10)).toMillis();
 
-        var file1 = new FileInfo("file1", "./file1", 100, create, update);
-        var file2 = new FileInfo("file2", "./file2", 100, create, update);
+        var file1 = new FileInfo("./file1", "file1", 100L, create, update);
+        var file2 = new FileInfo("./file2", "file2", 100L, create, update);
 
         var connections = List.of(new ImmutablePair<>(file1, file2));
 
@@ -33,14 +33,14 @@ public class UnionFindTest {
 
     @Test
     void connectedComponentsFromEdges_multipleConnections() {
-        var update = FileTime.from(Instant.now());
-        var create = FileTime.from(Instant.now().minusMillis(10));
+        var update = FileTime.from(Instant.now()).toMillis();
+        var create = FileTime.from(Instant.now().minusMillis(10)).toMillis();
 
-        var file1 = new FileInfo("file1", "./file1", 100, create, update);
-        var file2 = new FileInfo("file2", "./file2", 100, create, update);
-        var file3 = new FileInfo("file3", "./file3", 100, create, update);
-        var file4 = new FileInfo("file4", "./file4", 100, create, update);
-        var file5 = new FileInfo("file5", "./file5", 100, create, update);
+        var file1 = new FileInfo("./file1", "file1", 100L, create, update);
+        var file2 = new FileInfo("./file2", "file2", 100L, create, update);
+        var file3 = new FileInfo("./file3", "file3", 100L, create, update);
+        var file4 = new FileInfo("./file4", "file4", 100L, create, update);
+        var file5 = new FileInfo("./file5", "file5", 100L, create, update);
 
         var connections = List.of(new ImmutablePair<>(file1, file2), new ImmutablePair<>(file5, file3), new ImmutablePair<>(file4, file2));
 
@@ -64,13 +64,13 @@ public class UnionFindTest {
 
     @Test
     void connectedComponentsFromEdges_disconnectedComponents() {
-        var update = FileTime.from(Instant.now());
-        var create = FileTime.from(Instant.now().minusMillis(10));
+        var update = FileTime.from(Instant.now()).toMillis();
+        var create = FileTime.from(Instant.now().minusMillis(10)).toMillis();
 
-        var file1 = new FileInfo("file1", "./file1", 100, create, update);
-        var file2 = new FileInfo("file2", "./file2", 100, create, update);
-        var file3 = new FileInfo("file3", "./file3", 100, create, update);
-        var file4 = new FileInfo("file4", "./file4", 100, create, update);
+        var file1 = new FileInfo("./file1", "file1", 100L, create, update);
+        var file2 = new FileInfo("./file2", "file2", 100L, create, update);
+        var file3 = new FileInfo("./file3", "file3", 100L, create, update);
+        var file4 = new FileInfo("./file4", "file4", 100L, create, update);
 
         var connections = List.of(new ImmutablePair<>(file1, file2), new ImmutablePair<>(file3, file4));
 
