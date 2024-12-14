@@ -36,9 +36,11 @@ public class AppUsageExample {
         appUsageExample.demoNormal();
 //		appUsageExample.demoArchive();
 //		appUsageExample.demoMove();
+
+
     }
 
-    private void showFile(File file) {
+    private void addFile(File file) {
         if (file.isFile()) {
             var fileInfo = new FileInfo(file);
             System.out.println(fileInfo.describe());
@@ -58,7 +60,7 @@ public class AppUsageExample {
 
     private void printPathsInDirectory(Path directoryPath) {
         try {
-            Files.walk(directoryPath).forEach(path -> showFile(path.toFile()));
+            Files.walk(directoryPath).forEach(path -> addFile(path.toFile()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -67,9 +69,19 @@ public class AppUsageExample {
     public void demoNormal() {
         Path dir = Paths.get(rootDirectoryPath);
         try {
-            Files.walk(dir).forEach(path -> showFile(path.toFile()));
+            Files.walk(dir).forEach(path -> addFile(path.toFile()));
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        System.out.println("ALL DESCENDANT FILES");
+        for (FileInfo fileInfo : repository.getDescendants(rootDirectoryPath)) {
+            System.out.printf("--> %s (size: %d)%n", fileInfo.getName(), fileInfo.getSize());
+        }
+
+        System.out.println("TOP FILES (by size)");
+        for (FileInfo fileInfo : repository.getLargestFiles(rootDirectoryPath, 3)) {
+            System.out.printf("--> %s (size: %d)%n", fileInfo.getName(), fileInfo.getSize());
         }
 
         sessionService.close();
