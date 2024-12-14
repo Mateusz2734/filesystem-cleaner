@@ -1,15 +1,38 @@
 package pl.edu.agh.to2.cleaner.repository;
 
-import java.util.List;
+import jakarta.persistence.PersistenceException;
+import org.hibernate.Session;
+import pl.edu.agh.to2.cleaner.session.SessionService;
+
 import java.util.Optional;
 
-public interface Repository<T> {
-    Optional<T> add(T repositoryObj);
+public abstract class Repository<T> {
+    final SessionService sessionService;
 
-    Optional<T> getById(Long id);
+    protected Repository(SessionService sessionService) {
+        this.sessionService = sessionService;
+    }
 
-    List<T> findAll();
+    public Optional<T> add(final T object) throws PersistenceException {
+        try (Session session = sessionService.getSession()) {
+            return sessionService.doAsTransaction(() -> {
+                session.merge(object);
+                return object;
+            });
+        }
+    }
 
-    void remove(T repositoryObj);
+    public boolean remove(final T object) throws PersistenceException {
+        try (Session session = sessionService.getSession()) {
+            return sessionService.doAsTransaction(() -> {
+                session.remove(object);
+                return true;
+            }).orElse(false);
+        }
+    }
+
+    public Session currentSession() {
+        return sessionService.getSession();
+    }
 
 }

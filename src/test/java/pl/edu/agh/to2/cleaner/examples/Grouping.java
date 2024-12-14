@@ -15,14 +15,7 @@ public class Grouping {
         var dir = "example_dir";
         var files = Files.walk(Path.of(dir))
                 .filter(Files::isRegularFile)
-                .map(path -> {
-                    try {
-                        return new FileInfo(path.toFile());
-                    } catch (Exception e) {
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
+                .map(FileInfo::new)
                 .toList();
 
         {
