@@ -1,5 +1,6 @@
 package pl.edu.agh.to2.cleaner.examples;
 
+import jakarta.persistence.PersistenceException;
 import pl.edu.agh.to2.cleaner.effect.Archive;
 import pl.edu.agh.to2.cleaner.effect.Move;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
@@ -17,7 +18,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class AppUsageExample {
+    private static final Logger logger = LoggerFactory.getLogger(AppUsageExample.class);
     private final SessionService sessionService = new SessionService();
     private final FileInfoRepository repository = new FileInfoRepository(sessionService);
     private final String rootDirectoryPath;
@@ -42,7 +47,12 @@ public class AppUsageExample {
         if (file.isFile()) {
             var fileInfo = new FileInfo(file);
             System.out.println(fileInfo.describe());
-            repository.add(fileInfo);
+            try {
+                repository.add(fileInfo);
+                logger.info("File %s added successfully.".formatted(fileInfo.getName()));
+            } catch (PersistenceException e) {
+                logger.error("Failed to add file: %s".formatted(fileInfo.getName()));
+            }
         }
     }
 
@@ -73,6 +83,7 @@ public class AppUsageExample {
         }
 
         sessionService.close();
+        logger.info("A demonstration of typical app functionalities has just finished!");
     }
 
     public void demoArchive() {
