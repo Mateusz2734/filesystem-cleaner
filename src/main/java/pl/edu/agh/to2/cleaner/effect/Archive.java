@@ -36,7 +36,7 @@ public class Archive implements IOSideEffect {
 
                 FileInputStream fis = new FileInputStream(fileToZip);
                 ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-                zipOut.putNextEntry(zipEntry);
+                zipOut. putNextEntry(zipEntry);
 
                 byte[] bytes = new byte[1024];
                 int length;

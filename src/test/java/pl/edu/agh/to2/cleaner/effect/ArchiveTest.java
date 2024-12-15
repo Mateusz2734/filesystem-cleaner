@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,47 @@ class ArchiveTest {
         for (File tempFile : tempFiles) {
             assertTrue(isFileInZip(zipFile, tempFile.getName()));
         }
+    }
+
+    @Test
+    void testArchiveFilesWithSameName() throws Exception {
+        // Dodatkowy test na pokazanie zastosowania Rename
+        // na rozwiązanie problamy archiwizacji plików o tej samej nazwie
+
+        File tempDir1 = Files.createTempDirectory("folder1").toFile();
+        File tempDir2 = Files.createTempDirectory("folder2").toFile();
+
+        File file1 = new File(tempDir1, "duplicateName.txt");
+        File file2 = new File(tempDir2, "duplicateName.txt");
+
+        file1.createNewFile();
+        file2.createNewFile();
+
+        FileInfo fileInfo1 = new FileInfo(file1);
+        FileInfo fileInfo2 = new FileInfo(file2);
+
+        // Wywołanie apply z Rename
+        String newName = "renamedDuplicate.txt";
+        Rename renameEffect = new Rename(fileInfo2, newName);
+        renameEffect.apply();
+
+        List<FileInfo> fileInfoList = new ArrayList<>();
+        fileInfoList.add(fileInfo1);
+        fileInfoList.add(fileInfo2);
+
+        Archive archiveEffect = new Archive(fileInfoList, tempDirectoryPath);
+        archiveEffect.apply();
+
+        File zipFile = new File(tempDirectoryPath + "/compressed.zip");
+        assertTrue(zipFile.exists());
+        assertTrue(isFileInZip(zipFile, fileInfo1.getName()));
+        assertTrue(isFileInZip(zipFile, newName));
+
+        // Dodatkowe sprzątanie
+        Files.deleteIfExists(file1.toPath());
+        Files.deleteIfExists(file2.toPath());
+        Files.deleteIfExists(tempDir1.toPath());
+        Files.deleteIfExists(tempDir2.toPath());
     }
 
     private boolean isFileInZip(File zipFile, String fileName) throws IOException {
