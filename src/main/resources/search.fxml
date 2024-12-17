@@ -8,7 +8,20 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+            fx:controller="pl.edu.agh.to2.cleaner.presenter.SearchPresenter"
+            prefHeight="400.0" prefWidth="600.0">
+    <VBox>
+        <HBox>
+            <Label>
+                Wpisz ścieżkę pliku:
+            </Label>
+            <TextField fx:id="pathTextField">
 
+            </TextField>
+            <Button fx:id="fileChooser" text="X" onAction="#openFileChooser">
+
+            </Button>
+        </HBox>
+
+    </VBox>
 </AnchorPane>
