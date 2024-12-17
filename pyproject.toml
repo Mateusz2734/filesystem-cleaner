@@ -1,0 +1,13 @@
+[project]
+name = "to-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.6",
+    "flask>=3.1.0",
+    "pydantic>=2.10.3",
+    "sentence-transformers>=3.3.1",
+    "ujson>=5.10.0",
+]

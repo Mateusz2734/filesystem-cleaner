@@ -30,6 +30,8 @@ public class FileInfo {
     private Long modificationTimeMS;
     @Column(name = Columns.CREATION_TIME)
     private Long creationTimeMS;
+    @Column(name = Columns.EMBEDDING)
+    private Float[] embedding;
 
     public FileInfo() {
     }
@@ -67,6 +69,14 @@ public class FileInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setEmbedding(Float[] embedding) {
+        this.embedding = embedding;
+    }
+
+    public Float[] getEmbedding() {
+        return embedding;
     }
 
     public Path toPath() {
@@ -115,5 +125,6 @@ public class FileInfo {
         public static final String SIZE = "size";
         public static final String MODIFICATION_TIME = "modification_time";
         public static final String CREATION_TIME = "creation_time";
+        public static final String EMBEDDING = "embedding";
     }
 }
