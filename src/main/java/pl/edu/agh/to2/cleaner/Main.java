@@ -11,7 +11,7 @@ public class Main {
 	public static void main(String[] args) {
 		String filePath = "C:/Users/Maksymilian Katolik/Desktop/TO lab/to-project/example_dir/plik1.txt";
 
-		String newFileName = "ezmieniony_plik1.txt";
+		String newFileName = "zmieniony_plik1.txt";
 
 		File file = new File(filePath);
 
