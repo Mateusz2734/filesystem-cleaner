@@ -27,7 +27,7 @@
                 <CheckBox fx:id="duplicateCheckbox" text="Duplicates"/>
             </VBox>
         </VBox>
-        <Button fx:id="searchFiles" text="Search for connected files..." onAction="#searchForFiles"/>
+        <Button fx:id="searchFiles" text="Search for connected files..." onAction="#enterDirectory"/>
         <Label fx:id="errorLabel">
 
         </Label>

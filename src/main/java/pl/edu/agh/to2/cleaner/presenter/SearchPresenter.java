@@ -2,6 +2,9 @@ package pl.edu.agh.to2.cleaner.presenter;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -21,7 +24,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 
-public class SearchPresenter {
+public class SearchPresenter implements Presenter {
 
     private Stage stage;
 
@@ -71,7 +74,7 @@ public class SearchPresenter {
     }
 
     @FXML
-    public void searchForFiles(ActionEvent event) throws IOException {
+    public void enterDirectory(ActionEvent event) throws IOException {
         var dir = pathTextField.getText();
 
         if (dir.isEmpty()) {
@@ -82,45 +85,61 @@ public class SearchPresenter {
         }
         else {
             errorLabel.setText("");
-            var files = Files.walk(Path.of(dir))
-                    .filter(Files::isRegularFile)
-                    .map(path -> {
-                        try {
-                            return new FileInfo(path.toFile());
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    })
-                    .filter(Objects::nonNull)
-                    .toList();
+//            var files = Files.walk(Path.of(dir))
+//                    .filter(Files::isRegularFile)
+//                    .map(path -> {
+//                        try {
+//                            return new FileInfo(path.toFile());
+//                        } catch (Exception e) {
+//                            return null;
+//                        }
+//                    })
+//                    .filter(Objects::nonNull)
+//                    .toList();
+//
+//            {
+//                var connections = new FileVersionsFinder(files).find();
+//                var groups = new UnionFind().connectedComponentsFromEdges(connections);
+//
+//                System.out.println("Versions (similar name):");
+//                for (var group : groups) {
+//                    System.out.println("Group:");
+//                    for (var file : group) {
+//                        System.out.println("\t" +file.getPath());
+//                    }
+//                }
+//            }
+//
+//            System.out.println("\n");
+//
+//            {
+//                var connections = new FileDuplicateFinder(files).find();
+//                var groups = new UnionFind().connectedComponentsFromEdges(connections);
+//
+//                System.out.println("Duplicates (same size and name):");
+//                for (var group : groups) {
+//                    System.out.println("Group:");
+//                    for (var file : group) {
+//                        System.out.println("\t" + file.getPath());
+//                    }
+//                }
+//            }
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("searchResult.fxml"));
+                Parent searchResult = loader.load();
 
-            {
-                var connections = new FileVersionsFinder(files).find();
-                var groups = new UnionFind().connectedComponentsFromEdges(connections);
+                SearchResultPresenter presenter = loader.getController();
 
-                System.out.println("Versions (similar name):");
-                for (var group : groups) {
-                    System.out.println("Group:");
-                    for (var file : group) {
-                        System.out.println("\t" +file.getPath());
-                    }
-                }
-            }
+                presenter.setStage(stage);
+                presenter.setDirectory(dir);
+                presenter.searchInDirectory();
 
-            System.out.println("\n");
-
-            {
-                var connections = new FileDuplicateFinder(files).find();
-                var groups = new UnionFind().connectedComponentsFromEdges(connections);
-
-                System.out.println("Duplicates (same size and name):");
-                for (var group : groups) {
-                    System.out.println("Group:");
-                    for (var file : group) {
-                        System.out.println("\t" + file.getPath());
-                    }
-                }
+                stage.setScene(new Scene(searchResult));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+
+
     }
 }
