@@ -13,15 +13,23 @@
     <VBox>
         <HBox>
             <Label>
-                Wpisz ścieżkę pliku:
+                Enter the absolute path of search area:
             </Label>
-            <TextField fx:id="pathTextField">
-
-            </TextField>
-            <Button fx:id="fileChooser" text="X" onAction="#openFileChooser">
-
-            </Button>
+            <TextField fx:id="pathTextField"/>
+            <Button fx:id="fileChooser" text="Search for file..." onAction="#openFileChooser"/>
         </HBox>
+        <VBox>
+            <Label>
+                Search for:
+            </Label>
+            <VBox>
+                <CheckBox fx:id="versionCheckbox" text="Versions"/>
+                <CheckBox fx:id="duplicateCheckbox" text="Duplicates"/>
+            </VBox>
+        </VBox>
+        <Button fx:id="searchFiles" text="Search for connected files..." onAction="#searchForFiles"/>
+        <Label fx:id="errorLabel">
 
+        </Label>
     </VBox>
 </AnchorPane>
