@@ -5,6 +5,7 @@ import pl.edu.agh.to2.cleaner.session.SessionService;
 
 import java.io.*;
 import java.util.List;
+import java.util.logging.Level;
 
 public class FileContentEmbedder {
     public static double cosineSimilarity(Float[] vectorA, Float[] vectorB) {
@@ -38,11 +39,14 @@ public class FileContentEmbedder {
     }
 
     public static void main(String[] args) {
+        // Disable Hibernate logging for this example
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         new Thread(EmbeddingServerClient::run).start();
 
         var sessionService = new SessionService();
         var repository = new FileInfoRepository(sessionService);
 
+        System.out.println("Waiting for the server to start...");
         while (!EmbeddingServerClient.ping()) {
             try {
                 Thread.sleep(5000);
@@ -55,6 +59,7 @@ public class FileContentEmbedder {
             repository.add(fileInfo);
         }
 
+        System.out.println("Embedding files...");
         files = FileContentEmbedder.embedFiles(files);
 
         for (FileInfo fileInfo : files) {
@@ -62,6 +67,7 @@ public class FileContentEmbedder {
         }
 
         for (FileInfo f1 : files) {
+            System.out.println();
             for (FileInfo f2 : files) {
                 if (f1 == f2 || f1.getEmbedding() == null || f2.getEmbedding() == null) {
                     continue;
