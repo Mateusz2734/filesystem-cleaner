@@ -1,6 +1,5 @@
 package pl.edu.agh.to2.cleaner.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.edu.agh.to2.cleaner.repository.FileInfoRepository;
 import pl.edu.agh.to2.cleaner.session.SessionService;
 
@@ -21,40 +20,34 @@ public class FileContentEmbedder {
         return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
     }
 
-    public static List<FileInfo> embed(List<FileInfo> files) {
-        var mapper = new ObjectMapper();
-        var pb = new ProcessBuilder("uv", "run", "embed.py");
-
-        try {
-            Process process = pb.start();
-
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
+    public static List<FileInfo> embedFiles(List<FileInfo> files) {
             for (FileInfo fileInfo : files) {
-                var fileContents = new String(java.nio.file.Files.readAllBytes(fileInfo.toPath())).replaceAll(System.lineSeparator(), " ");
+                try {
+                    var fileContents = new String(java.nio.file.Files.readAllBytes(fileInfo.toPath())).replaceAll(System.lineSeparator(), " ");
 
-                writer.write(fileContents + "\n");
-                writer.flush();
+                    var embedding = EmbeddingServerClient.fetchEmbedding(fileContents);
 
-                Float[] embedding = mapper.readValue(reader.readLine(), Float[].class);
+                    if (embedding != null) {
+                        fileInfo.setEmbedding(embedding);
+                    }
 
-                fileInfo.setEmbedding(embedding);
+                } catch (IOException ignored) {}
             }
 
-            writer.write("exit\n");
-            writer.flush();
-            writer.close();
-            process.waitFor();
-        } catch (Exception e) {
-            System.err.println("Fatal error occurred while embedding file contents.");
-        }
-        return files;
+            return files;
     }
 
     public static void main(String[] args) {
+        new Thread(EmbeddingServerClient::run).start();
+
         var sessionService = new SessionService();
         var repository = new FileInfoRepository(sessionService);
+
+        while (!EmbeddingServerClient.ping()) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ignored) {}
+        }
 
         List<FileInfo> files = List.of(new FileInfo(new File("example_dir/macbeth.txt")), new FileInfo(new File("example_dir/act1.txt")), new FileInfo(new File("example_dir/inner/deep/act3.txt")), new FileInfo(new File("example_dir/inner/placeholder.txt")));
 
@@ -62,7 +55,7 @@ public class FileContentEmbedder {
             repository.add(fileInfo);
         }
 
-        files = FileContentEmbedder.embed(files);
+        files = FileContentEmbedder.embedFiles(files);
 
         for (FileInfo fileInfo : files) {
             repository.add(fileInfo);
@@ -76,6 +69,8 @@ public class FileContentEmbedder {
                 System.out.println(f1.getName() + " vs " + f2.getName() + ": " + cosineSimilarity(f1.getEmbedding(), f2.getEmbedding()));
             }
         }
+
+        EmbeddingServerClient.shutdown();
     }
 }
 
