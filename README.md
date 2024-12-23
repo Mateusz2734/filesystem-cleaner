@@ -23,6 +23,18 @@ Do zrealizowania na ten etap wyznaczono poszczególne funkcjonalności:
 
 ***
 
+## ETAP II
+Funkcjonalności do zrealizowania na ten etap:
+* Podstawowe GUI
+* Zapisywanie logów z akcji
+* Usprawnienie działania Archive - możliwość zmiany nazwy kolidujących plików
+* Dodanie `Rename`
+* Usunięcie DAO na rzecz Repository
+* Sortowanie plików po rozmiarze
+* Ekstrakcja keywordów (embedding zawartości plików)
+
+***
+
 ### Klasy porównywania plików
 ![](/resources/comparator.png)
 
