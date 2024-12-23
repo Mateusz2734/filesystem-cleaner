@@ -4,12 +4,17 @@ import org.apache.commons.io.FilenameUtils;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 import pl.edu.agh.to2.cleaner.session.SessionService;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
 public class FileInfoRepository extends Repository<FileInfo> {
     public FileInfoRepository(SessionService sessionService) {
         super(sessionService);
+    }
+
+    public List<FileInfo> getDescendants(Path root) {
+        return getDescendants(root.toAbsolutePath().toString());
     }
 
     public List<FileInfo> getDescendants(String root) {

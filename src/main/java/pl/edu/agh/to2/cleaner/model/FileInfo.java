@@ -32,6 +32,8 @@ public class FileInfo {
     private Long creationTimeMS;
     @Column(name = Columns.EMBEDDING)
     private Float[] embedding;
+    @Column(name = Columns.CHECKSUM)
+    private Long checksum = -1L;
 
     public FileInfo() {
     }
@@ -71,12 +73,12 @@ public class FileInfo {
         this.name = name;
     }
 
-    public void setEmbedding(Float[] embedding) {
-        this.embedding = embedding;
-    }
-
     public Float[] getEmbedding() {
         return embedding;
+    }
+
+    public void setEmbedding(Float[] embedding) {
+        this.embedding = embedding;
     }
 
     public Path toPath() {
@@ -103,6 +105,14 @@ public class FileInfo {
         return creationTimeMS;
     }
 
+    public Long getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(Long checksum) {
+        this.checksum = checksum;
+    }
+
     public String describe() {
         return "File: " + path + " | Extension: " + FilenameUtils.getExtension(path) + " | Size: " + size + " B | Modification time: " + formatTime(modificationTimeMS) + " | Creation time: " + formatTime(creationTimeMS);
     }
@@ -110,6 +120,11 @@ public class FileInfo {
     @Override
     public String toString() {
         return getPath();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 
     private String formatTime(Long time) {
@@ -126,5 +141,6 @@ public class FileInfo {
         public static final String MODIFICATION_TIME = "modification_time";
         public static final String CREATION_TIME = "creation_time";
         public static final String EMBEDDING = "embedding";
+        public static final String CHECKSUM = "checksum";
     }
 }

@@ -4,8 +4,10 @@ import pl.edu.agh.to2.cleaner.repository.FileInfoRepository;
 import pl.edu.agh.to2.cleaner.session.SessionService;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.zip.CRC32;
 
 public class FileContentEmbedder {
     public static double cosineSimilarity(Float[] vectorA, Float[] vectorB) {
@@ -22,20 +24,31 @@ public class FileContentEmbedder {
     }
 
     public static List<FileInfo> embedFiles(List<FileInfo> files) {
-            for (FileInfo fileInfo : files) {
-                try {
-                    var fileContents = new String(java.nio.file.Files.readAllBytes(fileInfo.toPath())).replaceAll(System.lineSeparator(), " ");
+        for (FileInfo fileInfo : files) {
+            try {
+                var bytes = Files.readAllBytes(fileInfo.toPath());
+                var fileContents = new String(bytes);
 
-                    var embedding = EmbeddingServerClient.fetchEmbedding(fileContents);
+                var embedding = EmbeddingServerClient.fetchEmbedding(fileContents);
 
-                    if (embedding != null) {
-                        fileInfo.setEmbedding(embedding);
-                    }
+                if (embedding != null) {
+                    fileInfo.setChecksum(checksum(bytes));
+                    fileInfo.setEmbedding(embedding);
+                }
 
-                } catch (IOException ignored) {}
+            } catch (IOException ignored) {
             }
+        }
 
-            return files;
+        return files;
+    }
+
+    public static long checksum(byte[] bytes) {
+        CRC32 crc32 = new CRC32();
+
+        crc32.update(bytes, 0, bytes.length);
+
+        return crc32.getValue();
     }
 
     public static void main(String[] args) {
@@ -50,7 +63,8 @@ public class FileContentEmbedder {
         while (!EmbeddingServerClient.ping()) {
             try {
                 Thread.sleep(5000);
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException ignored) {
+            }
         }
 
         List<FileInfo> files = List.of(new FileInfo(new File("example_dir/macbeth.txt")), new FileInfo(new File("example_dir/act1.txt")), new FileInfo(new File("example_dir/inner/deep/act3.txt")), new FileInfo(new File("example_dir/inner/placeholder.txt")));
