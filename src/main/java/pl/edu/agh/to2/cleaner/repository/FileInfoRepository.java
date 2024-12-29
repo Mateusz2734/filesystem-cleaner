@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 import pl.edu.agh.to2.cleaner.session.SessionService;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,8 @@ public class FileInfoRepository extends Repository<FileInfo> {
     public FileInfoRepository(SessionService sessionService) {
         super(sessionService);
     }
+
+    
 
     private String normalizeRootDirectoryPath(String root) {
         // Conversion for root: <relative path> -> <absolute path>.
@@ -31,6 +34,10 @@ public class FileInfoRepository extends Repository<FileInfo> {
         return normalizedRoot;
     }
 
+    public List<FileInfo> getDescendants(Path root) {
+        return getDescendants(root.toAbsolutePath().toString());
+    }
+  
     public List<FileInfo> getDescendants(String root) {
         String normalizedRoot = normalizeRootDirectoryPath(root);
         return currentSession().createQuery("from FileInfo where path like :root", FileInfo.class).
