@@ -1,6 +1,7 @@
 package pl.edu.agh.to2.cleaner;
 
 import javafx.application.Application;
+import pl.edu.agh.to2.cleaner.gui.AppController;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 import pl.edu.agh.to2.cleaner.effect.Rename;
 
@@ -31,6 +32,6 @@ public class Main {
 //			System.err.println("Błąd podczas zmiany nazwy: " + e.getMessage());
 //		}
 
-		Application.launch(App.class);
+		Application.launch(AppController.class);
 	}
 }
