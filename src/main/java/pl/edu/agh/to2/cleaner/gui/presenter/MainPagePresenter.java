@@ -8,27 +8,34 @@ import java.io.IOException;
 
 public class MainPagePresenter implements Presenter{
 
-    public MainPagePresenter(){}
+    private AppController appController;
+
+    public MainPagePresenter() {
+    }
+
+    public MainPagePresenter(AppController appController){
+        this.appController = appController;
+    }
     @FXML
     public void cleanLabelHandler(MouseEvent event) {
-        try {
-            AppController.changeScene("file-choose.fxml");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+            appController.changeScene("file-choose.fxml");
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @FXML
     public void historyLabelHandler(MouseEvent event) {
         System.out.println("WOW");
-        try {
-            AppController.changeScene("file-choose.fxml");
-        }
-        catch (IOException e) {
-//            System.out.println("11111111111111111111111111111111111");
-            e.printStackTrace();
-        }
+//        try {
+            appController.changeScene("fileChoose");
+//        }
+//        catch (IOException e) {
+////            System.out.println("11111111111111111111111111111111111");
+//            e.printStackTrace();
+//        }
     }
 
     @FXML
@@ -38,6 +45,7 @@ public class MainPagePresenter implements Presenter{
 
     @Override
     public void initialize() {
+        this.appController = AppController.getInstance();
     }
 
     @Override

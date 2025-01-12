@@ -10,17 +10,14 @@ import java.io.IOException;
 public class ResultsPresenter implements Presenter{
 //    private FileInfo directory;
 
+    private AppController appController;
+
     private String directory;
 
     @FXML
     private Button fuckgoback;
 
     public ResultsPresenter() {
-
-    }
-
-    public ResultsPresenter(String directory) {
-        this.directory = directory;
     }
 
     public void setDirectory(String directory) {
@@ -38,15 +35,11 @@ public class ResultsPresenter implements Presenter{
 
     @Override
     public void initialize() {
+        this.appController = AppController.getInstance();
     }
 
     @FXML
     public void fuckgobackHandle() {
-        try {
-            AppController.changeScene("file-choose.fxml");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        appController.changeScene("fileChoose");
     }
 }

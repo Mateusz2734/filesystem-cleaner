@@ -32,6 +32,6 @@ public class Main {
 //			System.err.println("Błąd podczas zmiany nazwy: " + e.getMessage());
 //		}
 
-		Application.launch(AppController.class);
+		Application.launch(App.class);
 	}
 }

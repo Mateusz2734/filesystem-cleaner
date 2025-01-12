@@ -19,6 +19,8 @@ import java.io.IOException;
 
 public class FileChoosePresenter implements Presenter{
 
+    private AppController appController;
+
     @FXML
     private Button directoryChooseButton;
 
@@ -30,8 +32,12 @@ public class FileChoosePresenter implements Presenter{
 
     private ObjectProperty<String> directoryPath = new SimpleObjectProperty<>();
 
+    public FileChoosePresenter() {
+    }
+
     @Override
     public void initialize() {
+        this.appController = AppController.getInstance();
         directoryPath.addListener((source, oldValue, newValue) -> {
             pathLabel.setText(newValue);
         });
@@ -57,32 +63,33 @@ public class FileChoosePresenter implements Presenter{
 
     @FXML
     public void goHandle() {
-        try {
-            System.out.println("DZIALA");
-//            ResultsPresenter resultsPresenter = new ResultsPresenter();
-//            resultsPresenter.setDirectory("WOW");
-//            AppController.changeScene("results.fxml");
-            FXMLLoader loader = new FXMLLoader(AppController.class.getClassLoader().getResource("results.fxml"));
-            Parent root = loader.load();
-
-            ResultsPresenter presenter = loader.getController();
-            presenter.setDirectory("WOW");
-
-            System.out.println(presenter.getClass());
-
-            if (presenter.isViewAvailable()) {
-                System.out.println("PREZENTER DA SIE");
-                Scene scene = new Scene(root);
-                AppController.setScene(scene);
-            }
-            else {
-                System.out.println("PREZENTER NIE DA SIE");
-            }
-        }
-        catch (IOException e) {
-            System.out.println("NIE DZIALA");
-
-            e.printStackTrace();
-        }
+//        try {
+//            System.out.println("DZIALA");
+////            ResultsPresenter resultsPresenter = new ResultsPresenter();
+////            resultsPresenter.setDirectory("WOW");
+////            AppController.changeScene("results.fxml");
+//            FXMLLoader loader = new FXMLLoader(AppController.class.getClassLoader().getResource("results.fxml"));
+//            Parent root = loader.load();
+//
+//            ResultsPresenter presenter = loader.getController();
+//            presenter.setDirectory("WOW");
+//
+//            System.out.println(presenter.getClass());
+//
+//            if (presenter.isViewAvailable()) {
+//                System.out.println("PREZENTER DA SIE");
+//                Scene scene = new Scene(root);
+//                appController.setScene(scene);
+//            }
+//            else {
+//                System.out.println("PREZENTER NIE DA SIE");
+//            }
+//        }
+//        catch (IOException e) {
+//            System.out.println("NIE DZIALA");
+//
+//            e.printStackTrace();
+//        }
+        appController.changeScene("results");
     }
 }

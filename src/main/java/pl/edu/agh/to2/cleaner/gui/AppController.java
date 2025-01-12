@@ -13,39 +13,74 @@ import pl.edu.agh.to2.cleaner.gui.presenter.Presenter;
 import pl.edu.agh.to2.cleaner.gui.presenter.ResultsPresenter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class AppController extends Application {
+public class AppController {
 
-    private static Stage stage;
+    private static AppController instance;
+    private Stage stage;
 
-    private static FileChoosePresenter fileChoosePresenter;
-
-    private static MainPagePresenter mainPagePresenter;
-
-    private static ResultsPresenter resultsPresenter;
+    private Map<String, Presenter> presenters = new HashMap<>();
+    private Map<String, Scene> scenes = new HashMap<>();
 
     public AppController() {
-        this.fileChoosePresenter = new FileChoosePresenter();
-        this.mainPagePresenter = new MainPagePresenter();
-        this.resultsPresenter = new ResultsPresenter();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-
-        // AtlantaFX theme setup
-        Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
-
-        // Starting application
-        AppController.stage = primaryStage;
-        changeScene("main-page.fxml");
-
-        stageSettings();
-        AppController.stage.show();
+    // Singleton class
+    public static AppController getInstance() {
+        if (instance == null) {
+            instance = new AppController();
+        }
+        return instance;
     }
 
+    private void loadSceneAndPresenter(String fxmlFile, String key) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(fxmlFile));
+        Parent root = loader.load();
+
+        scenes.put(key, new Scene(root));
+        presenters.put(key, loader.getController());
+    }
+
+    public void loadMaps() {
+        try {
+            loadSceneAndPresenter("main-page.fxml", "mainPage");
+            loadSceneAndPresenter("results.fxml", "results");
+            loadSceneAndPresenter("file-choose.fxml", "fileChoose");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void start(Stage primaryStage) throws IOException {
+//
+//        // AtlantaFX theme setup
+//        Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+//
+//        // Starting application
+//        this.stage = primaryStage;
+//        changeScene("main-page.fxml");
+//
+//        setStageSettings();
+//    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void setStageSettings() {
+        this.stage.setTitle("Cleaner 2025");
+        this.stage.setResizable(false);
+        this.stage.setWidth(960);
+        this.stage.setHeight(540);
+    }
     // Method used by presenters to change between each others
-    public static void changeScene(String sceneName) throws IOException {
+
+    public void changeScene(String sceneName) {
 //        FXMLLoader loader = new FXMLLoader(AppController.class.getClassLoader().getResource(sceneName));
 //        Parent root = loader.load();
 //
@@ -62,28 +97,18 @@ public class AppController extends Application {
 //            System.out.println("PREZENTER NIE DA SIE");
 //        }
 
-        FXMLLoader loader = new FXMLLoader(AppController.class.getClassLoader().getResource(sceneName));
-        Parent root = loader.load();
+        Scene scene = scenes.get(sceneName);
 
-        Presenter presenter;
-        switch (sceneName) {
-            case "main-page.fxml":
-                presenter = mainPagePresenter;
+        System.out.println("HFDJSBFHJVDSJVGFVGSDVGFDSJVFGJDVGS");
 
+        if (scene != null) {
+            this.stage.setScene(scene);
         }
     }
 
-    public static void setScene(Scene scene) {
-        AppController.stage.setScene(scene);
-    }
+    public void start() {
+        this.stage.show();
 
-    private void stageSettings() {
-        AppController.stage.setTitle("Cleaner 2025");
-        AppController.stage.setResizable(false);
-        AppController.stage.setWidth(960);
-        AppController.stage.setHeight(540);
     }
-
-//POMYSŁY NA DEKOMPOZYCJE
 }
 
