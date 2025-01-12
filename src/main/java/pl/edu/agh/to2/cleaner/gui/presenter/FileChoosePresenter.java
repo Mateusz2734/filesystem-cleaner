@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
@@ -20,24 +21,44 @@ import java.io.IOException;
 public class FileChoosePresenter implements Presenter{
 
     private AppController appController;
+    private ObjectProperty<String> directoryPath = new SimpleObjectProperty<>();
+
 
     @FXML
     private Button directoryChooseButton;
 
     @FXML
+    private Button enterPathButton;
+
+    @FXML
+    private Button goSearchButton;
+
+    @FXML
     private TextField pathTextField;
+
+    @FXML
+    private CheckBox duplicateCheckbox;
+
+    @FXML
+    private CheckBox versionCheckbox;
 
     @FXML
     private Label pathLabel;
 
-    private ObjectProperty<String> directoryPath = new SimpleObjectProperty<>();
+    @FXML
+    private Label errorLabel;
+
 
     public FileChoosePresenter() {
     }
 
     @Override
     public void initialize() {
+        //TODO creating checkboxes depending on functionality
         this.appController = AppController.getInstance();
+
+
+        // LABEL ERROR AS OBSERVER
         directoryPath.addListener((source, oldValue, newValue) -> {
             pathLabel.setText(newValue);
         });
@@ -62,6 +83,22 @@ public class FileChoosePresenter implements Presenter{
     }
 
     @FXML
+    public void enterPath() {
+        directoryPath.setValue(pathTextField.getText());
+    }
+
+    @FXML
+    public void goSearch() {
+        if (!appController.passDirectory(directoryPath.get())) {
+            errorLabel.setText("ERROR IN PASSING");
+        }
+        else {
+            errorLabel.setText("");
+            appController.changeScene("results");
+        }
+    }
+
+
     public void goHandle() {
 //        try {
 //            System.out.println("DZIALA");

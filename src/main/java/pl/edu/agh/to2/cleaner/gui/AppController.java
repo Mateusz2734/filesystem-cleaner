@@ -1,21 +1,14 @@
 package pl.edu.agh.to2.cleaner.gui;
 
-import atlantafx.base.theme.PrimerDark;
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import pl.edu.agh.to2.cleaner.gui.presenter.FileChoosePresenter;
-import pl.edu.agh.to2.cleaner.gui.presenter.MainPagePresenter;
 import pl.edu.agh.to2.cleaner.gui.presenter.Presenter;
 import pl.edu.agh.to2.cleaner.gui.presenter.ResultsPresenter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AppController {
@@ -29,7 +22,7 @@ public class AppController {
     public AppController() {
     }
 
-    // Singleton class
+    // Singleton getter
     public static AppController getInstance() {
         if (instance == null) {
             instance = new AppController();
@@ -56,18 +49,6 @@ public class AppController {
         }
     }
 
-//    public void start(Stage primaryStage) throws IOException {
-//
-//        // AtlantaFX theme setup
-//        Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
-//
-//        // Starting application
-//        this.stage = primaryStage;
-//        changeScene("main-page.fxml");
-//
-//        setStageSettings();
-//    }
-
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -78,37 +59,36 @@ public class AppController {
         this.stage.setWidth(960);
         this.stage.setHeight(540);
     }
+
     // Method used by presenters to change between each others
-
     public void changeScene(String sceneName) {
-//        FXMLLoader loader = new FXMLLoader(AppController.class.getClassLoader().getResource(sceneName));
-//        Parent root = loader.load();
-//
-//        Presenter presenter = loader.getController();
-//
-//        System.out.println(presenter.getClass());
-//
-//        if (presenter.isViewAvailable()) {
-//            System.out.println("PREZENTER DA SIE");
-//            Scene scene = new Scene(root);
-//            stage.setScene(scene);
-//        }
-//        else {
-//            System.out.println("PREZENTER NIE DA SIE");
-//        }
 
+        Presenter presenter = presenters.get(sceneName);
         Scene scene = scenes.get(sceneName);
 
-        System.out.println("HFDJSBFHJVDSJVGFVGSDVGFDSJVFGJDVGS");
-
+        // if false no such key in scenes
         if (scene != null) {
-            this.stage.setScene(scene);
+            if (presenter.isViewAvailable()) {
+                this.stage.setScene(scene);
+            }
         }
     }
 
     public void start() {
         this.stage.show();
+    }
 
+    public boolean passDirectory(String directory) {
+        Presenter presenter = presenters.get("results");
+
+        if (presenter.getClass() == ResultsPresenter.class) {
+            presenter = ((ResultsPresenter) presenter);
+            if (((ResultsPresenter) presenter).validatePath(directory)) {
+                ((ResultsPresenter) presenter).setDirectory(directory);
+                return true;
+            }
+        }
+        return false;
     }
 }
 

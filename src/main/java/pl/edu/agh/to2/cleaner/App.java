@@ -10,17 +10,17 @@ import java.io.IOException;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        // AtlantaFX theme setup
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
 
+        // Setting main controller
         AppController appController = AppController.getInstance();
         appController.loadMaps();
         appController.setStage(primaryStage);
         appController.setStageSettings();
 
-
-        System.out.println("HDSFBJVDSG");
-
-
+        // First scene
         appController.changeScene("mainPage");
         appController.start();
     }
