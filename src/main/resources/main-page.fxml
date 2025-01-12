@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.to2.cleaner.gui.view.MainPageView">
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.to2.cleaner.gui.presenter.MainPagePresenter">
    <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: -color-accent-4;" StackPane.alignment="BOTTOM_LEFT">
       <StackPane.margin>
          <Insets bottom="20.0" left="20.0" />
