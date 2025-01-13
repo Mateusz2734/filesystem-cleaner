@@ -23,8 +23,9 @@
                         <Button fx:id="enterPathButton" onAction="#enterPath" mnemonicParsing="false" text="Enter the path" />
                      </children>
                   </HBox>
-                  <CheckBox fx:id="duplicateCheckbox" mnemonicParsing="false" text="Duplicate" />
-                  <CheckBox fx:id="versionCheckbox" mnemonicParsing="false" text="Version" />
+                  <VBox fx:id="checkBoxContainer" prefHeight="200.0" prefWidth="100.0" />
+<!--                  <CheckBox fx:id="duplicateCheckbox" mnemonicParsing="false" text="Duplicate" />-->
+<!--                  <CheckBox fx:id="versionCheckbox" mnemonicParsing="false" text="Version" />-->
                </children>
             </VBox>
             <Label fx:id="pathLabel" text="Empty path" />

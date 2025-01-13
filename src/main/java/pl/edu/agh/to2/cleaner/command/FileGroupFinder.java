@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract class FileGroupFinder {
-    private final List<FileInfo> files;
+    private List<FileInfo> files;
     private final FileComparator comparator;
+
+    public FileGroupFinder(FileComparator comparator) {
+        this.comparator = comparator;
+    }
 
     public FileGroupFinder(List<FileInfo> files, FileComparator comparator) {
         this.files = files;
@@ -30,5 +34,9 @@ abstract class FileGroupFinder {
             }
         }
         return connections;
+    }
+
+    public void setFiles(List<FileInfo> files) {
+        this.files = files;
     }
 }

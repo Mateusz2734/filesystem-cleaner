@@ -2,26 +2,31 @@ package pl.edu.agh.to2.cleaner.gui.presenter;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import pl.edu.agh.to2.cleaner.command.FileDuplicateFinder;
+import pl.edu.agh.to2.cleaner.command.FileFinder;
+import pl.edu.agh.to2.cleaner.command.FileVersionsFinder;
 import pl.edu.agh.to2.cleaner.gui.AppController;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FileChoosePresenter implements Presenter{
 
     private AppController appController;
     private ObjectProperty<String> directoryPath = new SimpleObjectProperty<>();
+    private Map<String, CheckBox> searchTypesCheckboxMap = new HashMap<>();
+    private List<FileFinder> searchTypesList = new ArrayList<>();
 
 
     @FXML
@@ -37,10 +42,7 @@ public class FileChoosePresenter implements Presenter{
     private TextField pathTextField;
 
     @FXML
-    private CheckBox duplicateCheckbox;
-
-    @FXML
-    private CheckBox versionCheckbox;
+    private VBox checkBoxContainer;
 
     @FXML
     private Label pathLabel;
@@ -54,14 +56,35 @@ public class FileChoosePresenter implements Presenter{
 
     @Override
     public void initialize() {
-        //TODO creating checkboxes depending on functionality
+//        TODO creating checkboxes depending on functionality
         this.appController = AppController.getInstance();
-
+        loadSearchTypes();
 
         // LABEL ERROR AS OBSERVER
         directoryPath.addListener((source, oldValue, newValue) -> {
             pathLabel.setText(newValue);
         });
+    }
+
+    // MAYBE DI IN THE FUTURE?
+    private void loadSearchTypes() {
+        List<String> namesList = List.of(
+            "duplicate",
+            "version"
+        );
+
+        for (String name : namesList) {
+            searchTypesCheckboxMap.put(name, createCheckBox(name));
+        }
+
+        checkBoxContainer.getChildren().addAll(searchTypesCheckboxMap.values());
+    }
+
+    private CheckBox createCheckBox(String checkboxName) {
+        CheckBox checkBox = new CheckBox(checkboxName + "FindCheckbox");
+        checkBox.setMnemonicParsing(false);
+        checkBox.setText(checkboxName.substring(0, 1).toUpperCase() + checkboxName.substring(1) + " search");
+        return checkBox;
     }
 
     @Override
@@ -89,44 +112,26 @@ public class FileChoosePresenter implements Presenter{
 
     @FXML
     public void goSearch() {
-        if (!appController.passDirectory(directoryPath.get())) {
+        createFindersByCheckboxes();
+        errorLabel.setText("");
+
+        if (searchTypesList.isEmpty()) {
+            errorLabel.setText("CHECK THE SEARCH TYPE");
+        }
+        else if (!appController.passSearchInfo(directoryPath.get(), searchTypesList)) {
             errorLabel.setText("ERROR IN PASSING");
         }
         else {
-            errorLabel.setText("");
             appController.changeScene("results");
         }
     }
 
-
-    public void goHandle() {
-//        try {
-//            System.out.println("DZIALA");
-////            ResultsPresenter resultsPresenter = new ResultsPresenter();
-////            resultsPresenter.setDirectory("WOW");
-////            AppController.changeScene("results.fxml");
-//            FXMLLoader loader = new FXMLLoader(AppController.class.getClassLoader().getResource("results.fxml"));
-//            Parent root = loader.load();
-//
-//            ResultsPresenter presenter = loader.getController();
-//            presenter.setDirectory("WOW");
-//
-//            System.out.println(presenter.getClass());
-//
-//            if (presenter.isViewAvailable()) {
-//                System.out.println("PREZENTER DA SIE");
-//                Scene scene = new Scene(root);
-//                appController.setScene(scene);
-//            }
-//            else {
-//                System.out.println("PREZENTER NIE DA SIE");
-//            }
-//        }
-//        catch (IOException e) {
-//            System.out.println("NIE DZIALA");
-//
-//            e.printStackTrace();
-//        }
-        appController.changeScene("results");
+    public void createFindersByCheckboxes() {
+        if (searchTypesCheckboxMap.containsKey("duplicate")) {
+            searchTypesList.add(new FileDuplicateFinder());
+        }
+        else if (searchTypesCheckboxMap.containsKey("version")) {
+            searchTypesList.add(new FileVersionsFinder());
+        }
     }
 }

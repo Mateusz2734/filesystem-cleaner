@@ -5,16 +5,24 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import pl.edu.agh.to2.cleaner.command.FileFinder;
 import pl.edu.agh.to2.cleaner.gui.AppController;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResultsPresenter implements Presenter{
 
     private AppController appController;
     private ObjectProperty<String> directory = new SimpleObjectProperty<>();
+    private List<FileFinder> searchingTypes = new ArrayList<>();
 
     @FXML
-    private Button fuckgoback;
+    private Button backButton;
 
     @FXML
     private Label receivedPath;
@@ -25,11 +33,33 @@ public class ResultsPresenter implements Presenter{
     @Override
     public void initialize() {
         this.appController = AppController.getInstance();
+        directory.addListener((source, oldValue, newValue) -> {
+            if (directory.getValue() != null && !directory.getValue().isEmpty()) {
+                receivedPath.setText(directory.getValue());
+                System.out.println(directory.getValue());
+            }
+            else {
+                receivedPath.setText("NO DIRECTORY");
+            }
+        });
     }
 
-    public void setDirectory(String directory) {
-        this.directory.setValue(directory);
-        System.out.println(this.directory.toString());
+    public boolean setDirectory(String directory) {
+        if (validatePath(directory)) {
+            this.directory.setValue(directory);
+            System.out.println(this.directory.toString());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setSearchingTypes(List<FileFinder> searchingTypes) {
+        for (FileFinder search : searchingTypes) {
+            if (!searchingTypes.contains(search)) {
+                searchingTypes.add(search);
+            }
+        }
+        return !searchingTypes.isEmpty();
     }
 
     @Override
@@ -41,11 +71,18 @@ public class ResultsPresenter implements Presenter{
     }
 
     @FXML
-    public void fuckgobackHandle() {
+    public void gobackHandle() {
         appController.changeScene("fileChoose");
     }
 
     public boolean validatePath(String path) {
-        return true;
+        if (path != null) {
+            Path directoryPath = Paths.get(path);
+            boolean doesExist = Files.exists(directoryPath);
+            boolean isDirectory = Files.isDirectory(directoryPath);
+
+            return doesExist && isDirectory;
+        }
+        return false;
     }
 }

@@ -23,23 +23,21 @@ public class MainPagePresenter implements Presenter{
 
     @FXML
     public void cleanLabelHandler(MouseEvent event) {
-//        try {
-            appController.changeScene("file-choose.fxml");
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-
-    @FXML
-    public void historyLabelHandler(MouseEvent event) {
         appController.changeScene("fileChoose");
     }
 
+
+    // Right now without task
+    @FXML
+    public void historyLabelHandler(MouseEvent event) {
+//        appController.changeScene("fileChoose");
+        System.out.println("historyLabel touched");
+    }
+
+    // Right now without task
     @FXML
     public void authorsLabelHandler(MouseEvent event) {
-
+        System.out.println("authorsLabel touched");
     }
 
 

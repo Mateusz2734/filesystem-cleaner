@@ -4,11 +4,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.edu.agh.to2.cleaner.command.FileFinder;
 import pl.edu.agh.to2.cleaner.gui.presenter.Presenter;
 import pl.edu.agh.to2.cleaner.gui.presenter.ResultsPresenter;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AppController {
@@ -78,15 +80,11 @@ public class AppController {
         this.stage.show();
     }
 
-    public boolean passDirectory(String directory) {
+    public boolean passSearchInfo(String directory, List<FileFinder> searchTypes) {
         Presenter presenter = presenters.get("results");
 
-        if (presenter.getClass() == ResultsPresenter.class) {
-            presenter = ((ResultsPresenter) presenter);
-            if (((ResultsPresenter) presenter).validatePath(directory)) {
-                ((ResultsPresenter) presenter).setDirectory(directory);
-                return true;
-            }
+        if (presenter instanceof ResultsPresenter resultsPresenter) {
+            return resultsPresenter.setDirectory(directory) && resultsPresenter.setSearchingTypes(searchTypes);
         }
         return false;
     }

@@ -27,7 +27,7 @@
          </HBox>
          <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="500.0" spacing="50.0">
             <children>
-               <Label text="Clean">
+               <Label onMouseClicked="#cleanLabelHandler" text="Clean">
                   <font>
                      <Font name="System Bold" size="20.0" />
                   </font>
