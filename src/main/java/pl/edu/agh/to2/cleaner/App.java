@@ -22,6 +22,6 @@ public class App extends Application {
 
         // First scene
         appController.changeScene("mainPage");
-        appController.start();
+        appController.showStage();
     }
 }

@@ -47,6 +47,9 @@ Funkcjonalności do zrealizowania na ten etap:
 ### Warstwa persystencji
 ![](/resources/persistence.png)
 
+### Warstwa wyświetleniowa
+![](/resources/graphic-user-interface.png)
+
 ### Schemat bazy danych
 
 Wykorzystana technologia: **Hibernate**

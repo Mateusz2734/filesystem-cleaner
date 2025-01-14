@@ -7,7 +7,7 @@ import pl.edu.agh.to2.cleaner.model.comparator.FileComparator;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class FileGroupFinder {
+abstract class FileGroupFinder implements FileFinder {
     private List<FileInfo> files;
     private final FileComparator comparator;
 

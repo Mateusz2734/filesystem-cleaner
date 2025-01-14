@@ -4,7 +4,7 @@ import pl.edu.agh.to2.cleaner.model.FileInfo;
 import pl.edu.agh.to2.cleaner.model.comparator.NameSimilarityComparator;
 import java.util.List;
 
-public class FileVersionsFinder extends FileGroupFinder implements FileFinder {
+public class FileVersionsFinder extends FileGroupFinder {
     public FileVersionsFinder(List<FileInfo> files) {
         super(files, new NameSimilarityComparator());
     }
