@@ -76,7 +76,7 @@ public class ResultsPresenter implements Presenter{
     }
 
     public boolean validatePath(String path) {
-        if (path != null) {
+        if (path != null && !path.equals("")) {
             Path directoryPath = Paths.get(path);
             boolean doesExist = Files.exists(directoryPath);
             boolean isDirectory = Files.isDirectory(directoryPath);
