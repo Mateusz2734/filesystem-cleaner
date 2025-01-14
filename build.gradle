@@ -45,6 +45,10 @@ dependencies {
     implementation "org.glassfish.jaxb:jaxb-runtime:4.0.5"
     implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
 
+    implementation 'org.slf4j:slf4j-api:2.0.9' // Version of SLF4J
+    implementation 'ch.qos.logback:logback-classic:1.4.12' // Version of Logback
+
+
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.1'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.1'
 }

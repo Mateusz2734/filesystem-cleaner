@@ -1,0 +1,42 @@
+<configuration>
+    <!-- Appender: console log -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender: file log WITHOUT ROTATION -->
+    <!-- Commented out code left for educational purposes / future reference (e.g. in other projects). -->
+<!--    <appender name="FILE" class="ch.qos.logback.core.FileAppender">-->
+<!--        <file>logs/application.log</file> &lt;!&ndash; Path to the file where the logs are kept. &ndash;&gt;-->
+<!--        <append>true</append> &lt;!&ndash; true => Append instead of overwriting. &ndash;&gt;-->
+<!--        <encoder>-->
+<!--            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+    <!-- Appender: file log WITH ROTATION -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/application.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Automatically delete log files older than the number of days provided below. -->
+            <maxHistory>7</maxHistory> <!-- How many days should the logs be kept for? -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="pl.edu.agh.to2.cleaner.examples" level="info" additivity="false">
+    <!-- name="..." => Skip info-level logging from external libraries, such as Hibernate. -->
+    <!-- additivity="false" => Prevent logs (from this logger) from propagating to root logger -->
+        <appender-ref ref="ROLLING_FILE" />
+    </logger>
+
+    <!-- Main logger configuration / Root logger -->
+    <root level="warn">
+        <appender-ref ref="CONSOLE" />
+    </root>
+</configuration>
