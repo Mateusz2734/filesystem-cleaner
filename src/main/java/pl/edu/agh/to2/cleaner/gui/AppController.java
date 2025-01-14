@@ -76,7 +76,7 @@ public class AppController {
         }
     }
 
-    public void start() {
+    public void showStage() {
         this.stage.show();
     }
 
