@@ -59,3 +59,6 @@ stworzonej na podstawie klasy FileInfo. Przechowuje ona dane
 reprezentacji plików w programie.
 
 ![](/resources/database-scheme.png)
+
+## Wykorzystywane biblioteki
+- [AtlantaFX](https://github.com/mkpaz/atlantafx) -Projekt jest dostępny na licencji MIT. Szczegóły znajdują się w pliku [LICENSE](LICENSE)
