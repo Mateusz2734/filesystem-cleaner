@@ -11,7 +11,14 @@
 
 ***
 
-## ETAP I
+### Sposób uruchomienia projektu
+Do poprawnego uruchomienia serwera do embeddingu wymagane jest zinstalowanie pakietów z pliku `requirements.txt`.
+
+Aby uruchomić GUI należy uruchomić plik `Main.java` przy pomocy IntelliJ.
+
+***
+
+### ETAP I
 
 Do zrealizowania na ten etap wyznaczono poszczególne funkcjonalności:
 * Operacje na plikach (katalog *effect*)
@@ -23,7 +30,7 @@ Do zrealizowania na ten etap wyznaczono poszczególne funkcjonalności:
 
 ***
 
-## ETAP II
+### ETAP II
 Funkcjonalności do zrealizowania na ten etap:
 * Podstawowe GUI
 * Zapisywanie logów z akcji
@@ -60,5 +67,5 @@ reprezentacji plików w programie.
 
 ![](/resources/database-scheme.png)
 
-## Wykorzystywane biblioteki
+### Wykorzystywane biblioteki
 - [AtlantaFX](https://github.com/mkpaz/atlantafx) -Projekt jest dostępny na licencji MIT. Szczegóły znajdują się w pliku [LICENSE](LICENSE)
