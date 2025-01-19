@@ -25,7 +25,19 @@
             <maxHistory>7</maxHistory> <!-- How many days should the logs be kept for? -->
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ACTION_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/actions.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/actions.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Automatically delete log files older than the number of days provided below. -->
+            <maxHistory>7</maxHistory> <!-- How many days should the logs be kept for? -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss}|%msg%n</pattern>
         </encoder>
     </appender>
 
@@ -33,6 +45,10 @@
     <!-- name="..." => Skip info-level logging from external libraries, such as Hibernate. -->
     <!-- additivity="false" => Prevent logs (from this logger) from propagating to root logger -->
         <appender-ref ref="ROLLING_FILE" />
+    </logger>
+
+    <logger name="pl.edu.agh.to2.cleaner.service.FileManipulationService" level="info" additivity="false">
+        <appender-ref ref="ACTION_LOG" />
     </logger>
 
     <!-- Main logger configuration / Root logger -->
