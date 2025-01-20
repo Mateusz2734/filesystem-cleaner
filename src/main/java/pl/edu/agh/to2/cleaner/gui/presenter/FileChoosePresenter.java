@@ -11,12 +11,16 @@ import pl.edu.agh.to2.cleaner.command.FileDuplicateFinder;
 import pl.edu.agh.to2.cleaner.command.FileFinder;
 import pl.edu.agh.to2.cleaner.command.FileVersionsFinder;
 import pl.edu.agh.to2.cleaner.gui.AppController;
+import pl.edu.agh.to2.cleaner.logging.GuiLogAppender;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileChoosePresenter implements Presenter{
 
@@ -26,6 +30,7 @@ public class FileChoosePresenter implements Presenter{
     private Map<String, CheckBox> searchTypesCheckboxMap = new HashMap<>();
     private List<FileFinder> searchTypesList = new ArrayList<>();
 
+    private static final Logger logger = LoggerFactory.getLogger(FileChoosePresenter.class);
 
     @FXML
     private Button directoryChooseButton;
@@ -63,6 +68,8 @@ public class FileChoosePresenter implements Presenter{
 //        TODO creating checkboxes depending on functionality
         this.appController = AppController.getInstance();
         loadSearchTypes();
+
+        GuiLogAppender.setPresenter(this);
 
         // LABEL ERROR AS OBSERVER
         directoryPath.addListener((source, oldValue, newValue) -> {
@@ -105,15 +112,18 @@ public class FileChoosePresenter implements Presenter{
 
         if (chosenFile != null) {
             directoryPath.set(chosenFile.getAbsolutePath());
-            addLog("Directory chosen: " + chosenFile.getAbsolutePath());
+            logger.info("Directory chosen: " + chosenFile.getAbsolutePath());
         } else {
-            addLog("Directory selection canceled.");
+            logger.info("Directory selection canceled.");
         }
     }
 
     @FXML
     public void enterPath() {
         directoryPath.setValue(pathTextField.getText());
+        if (!pathTextField.getText().isEmpty())
+            logger.info("New path entered manually: " + pathTextField.getText());
+
     }
 
     @FXML
@@ -126,9 +136,15 @@ public class FileChoosePresenter implements Presenter{
         }
         else if (!appController.passSearchInfo(directoryPath.get(), searchTypesList)) {
             errorLabel.setText("ERROR IN PASSING");
+            if (directoryPath.get() == null || directoryPath.get().isEmpty()) {
+                logger.error("No file path has been provided.");
+            }
+            else
+                logger.error("The provided path \"%s\" is incorrect.".formatted(directoryPath.get()));
         }
         else {
             appController.changeScene("results");
+            logger.info("Searching in path \"%s\".".formatted(directoryPath.get()));
         }
     }
 
