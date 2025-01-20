@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResultsPresenter implements Presenter{
 
@@ -91,10 +92,11 @@ public class ResultsPresenter implements Presenter{
         if (validatePath(stringPath)) {
             Path path = Path.of(stringPath);
             this.path.setValue(path);
-            System.out.println(this.path.getValue().toString());
+            System.out.println(this.path.getValue().toString() + " was set succesfully as a path!");
             return true;
         }
 
+        System.out.println("Setting directory failed! Invalid path.");
         return false;
     }
 
@@ -106,7 +108,19 @@ public class ResultsPresenter implements Presenter{
                 searchingTypes.add(search);
             }
         }
-        return !searchingTypes.isEmpty();
+
+        if (!searchingTypes.isEmpty()) {
+            System.out.println("Succesfully added search types:\n" +
+                    searchingTypes.stream()
+                            .map(fileFinder -> fileFinder.getClass().getSimpleName())
+                            .collect(Collectors.joining("\n")));
+            return true;
+        }
+
+        else {
+            System.out.println("None of the search types declared!");
+            return false;
+        }
     }
 
     @Override
@@ -125,7 +139,6 @@ public class ResultsPresenter implements Presenter{
             boolean doesExist = Files.exists(path);
             boolean isDirectory = Files.isDirectory(path);
             boolean isEmpty = path.toString().isEmpty();
-//            System.out.println("Ścieżka: " + path + path.toString().isEmpty());
 
             return doesExist && isDirectory && !isEmpty;
         }

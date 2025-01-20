@@ -101,7 +101,6 @@ public class FileChoosePresenter implements Presenter{
 
         if (chosenFile != null) {
             directoryPath.set(chosenFile.getAbsolutePath());
-            System.out.println(chosenFile.getAbsolutePath());
         }
     }
 
@@ -138,11 +137,9 @@ public class FileChoosePresenter implements Presenter{
             if (selectedCheckBox.isSelected()) {
                 switch (key) {
                     case "duplicate":
-                        System.out.println("DUplikat true");
                         searchTypesList.add(new FileDuplicateFinder());
                         break;
                     case "version":
-                        System.out.println("WErsja true");
                         searchTypesList.add(new FileVersionsFinder());
                         break;
                 }

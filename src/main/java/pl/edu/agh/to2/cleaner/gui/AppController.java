@@ -85,8 +85,6 @@ public class AppController {
     public boolean passSearchInfo(String directory, List<FileFinder> searchTypes) {
         Presenter presenter = presenters.get("results");
 
-        System.out.println("Directory: " + directory + "; FileFinder: " + searchTypes.isEmpty() + " " + searchTypes.toString());
-
         if (presenter instanceof ResultsPresenter resultsPresenter) {
             return resultsPresenter.setDirectory(directory) && resultsPresenter.setSearchingTypes(searchTypes);
         }
