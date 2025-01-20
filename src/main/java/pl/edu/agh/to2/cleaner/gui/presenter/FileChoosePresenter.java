@@ -3,10 +3,7 @@ package pl.edu.agh.to2.cleaner.gui.presenter;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -23,6 +20,7 @@ import java.util.Map;
 
 public class FileChoosePresenter implements Presenter{
 
+//    public Label logLabel;
     private AppController appController;
     private ObjectProperty<String> directoryPath = new SimpleObjectProperty<>();
     private Map<String, CheckBox> searchTypesCheckboxMap = new HashMap<>();
@@ -50,6 +48,12 @@ public class FileChoosePresenter implements Presenter{
     @FXML
     private Label errorLabel;
 
+    @FXML
+    public TextArea logTextArea;
+
+    public void addLog(String log) {
+        logTextArea.appendText(log + "\n");
+    }
 
     public FileChoosePresenter() {
     }
@@ -101,7 +105,9 @@ public class FileChoosePresenter implements Presenter{
 
         if (chosenFile != null) {
             directoryPath.set(chosenFile.getAbsolutePath());
-            System.out.println(chosenFile.getAbsolutePath());
+            addLog("Directory chosen: " + chosenFile.getAbsolutePath());
+        } else {
+            addLog("Directory selection canceled.");
         }
     }
 
