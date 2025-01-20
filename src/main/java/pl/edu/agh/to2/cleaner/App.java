@@ -21,7 +21,7 @@ public class App extends Application {
         appController.setStageSettings();
 
         // First scene
-        appController.changeScene("results");
+        appController.changeScene("mainPage");
         appController.showStage();
     }
 }

@@ -115,11 +115,11 @@ public class FileChoosePresenter implements Presenter{
         createFindersByCheckboxes();
         errorLabel.setText("");
 
-        if (searchTypesList.isEmpty()) {
-            errorLabel.setText("CHECK THE SEARCH TYPE");
-        }
-        else if (!appController.passSearchInfo(directoryPath.get(), searchTypesList)) {
-            errorLabel.setText("ERROR IN PASSING");
+//        if (searchTypesList.isEmpty()) {
+//            errorLabel.setText("CHECK THE SEARCH TYPE");
+//        }
+        if (!appController.passSearchInfo(directoryPath.get(), searchTypesList)) {
+            errorLabel.setText("Invalid input!");
         }
         else {
             appController.changeScene("results");
@@ -127,11 +127,38 @@ public class FileChoosePresenter implements Presenter{
     }
 
     public void createFindersByCheckboxes() {
-        if (searchTypesCheckboxMap.containsKey("duplicate")) {
-            searchTypesList.add(new FileDuplicateFinder());
+        searchTypesList.clear();
+        CheckBox selectedCheckBox;
+        String key;
+
+        for (Map.Entry<String, CheckBox> entry : searchTypesCheckboxMap.entrySet()) {
+            key = entry.getKey();
+            selectedCheckBox = entry.getValue();
+
+            if (selectedCheckBox.isSelected()) {
+                switch (key) {
+                    case "duplicate":
+                        System.out.println("DUplikat true");
+                        searchTypesList.add(new FileDuplicateFinder());
+                        break;
+                    case "version":
+                        System.out.println("WErsja true");
+                        searchTypesList.add(new FileVersionsFinder());
+                        break;
+                }
+            }
+
         }
-        else if (searchTypesCheckboxMap.containsKey("version")) {
-            searchTypesList.add(new FileVersionsFinder());
-        }
+//        if (searchTypesCheckboxMap.containsKey("duplicate")) {
+//            selectedCheckBox = searchTypesCheckboxMap.get("duplicate");
+//            if selectedCheckBox
+//                searchTypesList.add(new FileDuplicateFinder());
+//        }
+//        else if (searchTypesCheckboxMap.containsKey("version")) {
+//            searchTypesList.add(new FileVersionsFinder());
+//        }
+//        else {
+//            searchTypesList.clear();
+//        }
     }
 }
