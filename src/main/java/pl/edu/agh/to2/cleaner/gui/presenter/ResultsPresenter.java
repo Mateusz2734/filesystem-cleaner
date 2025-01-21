@@ -3,11 +3,15 @@ package pl.edu.agh.to2.cleaner.gui.presenter;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import pl.edu.agh.to2.cleaner.command.FileDuplicateFinder;
 import pl.edu.agh.to2.cleaner.command.FileFinder;
 import pl.edu.agh.to2.cleaner.command.FileTreeIndexer;
@@ -21,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +39,7 @@ public class ResultsPresenter implements Presenter{
     private AppController appController = new AppController();
     private List<FileFinder> searchingTypes = new ArrayList<>();
     private ObjectProperty<Path> path = new SimpleObjectProperty<>();
-    private ObservableList<List<Set<FileInfo>>> searchResultList;
+    private ObservableList<Set<FileInfo>> searchResultList = FXCollections.observableArrayList();
 
     @FXML
     private Button backButton;
@@ -58,7 +63,7 @@ public class ResultsPresenter implements Presenter{
     private Label receivedPath;
 
     @FXML
-    private ListView<FileInfo> searchListView;
+    private ListView<Set<FileInfo>> searchListView;
 
 
     public ResultsPresenter() {
@@ -78,14 +83,8 @@ public class ResultsPresenter implements Presenter{
 //            }
         });
 
-
-
-//        for (int i = 0; i < 10; i++) {
-//            searchListView.getItems().add(new);
-//        }
-//        searchListView.getItems().add("JERY");
-//        searchListView.getItems().add("COS");
-//        searchListView.getItems().add("TAM");
+        configureListView();
+        searchListView.setItems(searchResultList);
 
         // Bindings
         deleteButton.disableProperty().bind(Bindings.isEmpty(searchListView.getSelectionModel().getSelectedItems()));
@@ -165,7 +164,7 @@ public class ResultsPresenter implements Presenter{
         List<FileInfo> filesToSearch = repository.getDescendants(path.getValue());
 
         for (FileFinder fileFinder : searchingTypes) {
-            getFilesInGroups(filesToSearch, fileFinder);
+            searchResultList.addAll(getFilesInGroups(filesToSearch, fileFinder));
         }
 
     }
@@ -200,5 +199,28 @@ public class ResultsPresenter implements Presenter{
         return groups;
     }
 
+    private void configureListView() {
+        searchListView.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Set<FileInfo> group, boolean empty) {
+                super.updateItem(group, empty);
 
+                if (empty || group == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    HBox groupBox = new HBox(10);
+                    groupBox.setAlignment(Pos.CENTER_LEFT);
+
+                    for (FileInfo fileInfo : group) {
+                        Label fileLabel = new Label(fileInfo.getName());
+
+                        groupBox.getChildren().addAll(fileLabel);
+                    }
+
+                    setGraphic(groupBox);
+                }
+            }
+        });
+    }
 }

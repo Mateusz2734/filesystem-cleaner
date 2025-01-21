@@ -27,7 +27,7 @@
       </HBox>
       <HBox prefHeight="381.0" prefWidth="960.0">
          <children>
-            <ListView fx:id="searchListView" prefHeight="382.0" prefWidth="1027.0" />
+            <ListView fx:id="searchListView" prefHeight="382.0" prefWidth="640.0" />
             <VBox alignment="CENTER" prefHeight="336.0" prefWidth="359.0">
                <children>
                   <Button fx:id="deleteButton" mnemonicParsing="false" text="Delete">
