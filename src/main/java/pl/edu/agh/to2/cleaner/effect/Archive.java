@@ -27,8 +27,7 @@ public class Archive implements IOSideEffect {
     }
 
     @Override
-    public void apply() {
-
+    public void apply() throws IOException {
         try (final FileOutputStream fos = new FileOutputStream(directoryPathToCreateZipInside + "/compressed.zip")) {
             ZipOutputStream zipOut = new ZipOutputStream(fos);
             for (FileInfo fileInfo : files) {
@@ -53,16 +52,6 @@ public class Archive implements IOSideEffect {
                 Files.delete(fileInfo.toPath());
             }
             zipOut.close();
-        } catch (IOException e) {
-            // TODO: handle exception
-            e.printStackTrace();
-            System.out.println("Failed to archive the files.");
         }
-
-    }
-
-    @Override
-    public String getLogString() {
-        return null;
     }
 }

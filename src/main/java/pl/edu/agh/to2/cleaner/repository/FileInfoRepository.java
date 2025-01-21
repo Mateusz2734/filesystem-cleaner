@@ -9,12 +9,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+@org.springframework.stereotype.Repository
 public class FileInfoRepository extends Repository<FileInfo> {
     public FileInfoRepository(SessionService sessionService) {
         super(sessionService);
     }
-
-    
 
     private String normalizeRootDirectoryPath(String root) {
         // Conversion for root: <relative path> -> <absolute path>.

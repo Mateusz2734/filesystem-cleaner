@@ -24,9 +24,4 @@ public class Delete implements IOSideEffect {
             Files.delete(file.toPath());
         }
     }
-
-    @Override
-    public String getLogString() {
-        return "Deleted " + files.size() + " files";
-    }
 }

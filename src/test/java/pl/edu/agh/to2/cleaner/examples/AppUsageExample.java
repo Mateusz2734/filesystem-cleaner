@@ -98,7 +98,7 @@ public class AppUsageExample {
         logger.info("A demonstration of typical app functionalities has just finished!");
     }
 
-    public void demoArchive() {
+    public void demoArchive() throws IOException {
         var dir = Paths.get(rootDirectoryPath);
         var filesToArchive = loadFilesIntoList(dir);
 
@@ -114,7 +114,7 @@ public class AppUsageExample {
         printPathsInDirectory(dir);
     }
 
-    public void demoMove() {
+    public void demoMove() throws IOException {
         Path dir = Paths.get(rootDirectoryPath);
         List<FileInfo> filesToMove = loadFilesIntoList(dir);
 

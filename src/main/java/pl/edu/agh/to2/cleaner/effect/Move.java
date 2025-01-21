@@ -26,39 +26,21 @@ public class Move implements IOSideEffect {
     }
 
     @Override
-    public void apply() {
-        try {
-            for (FileInfo fileInfo : filesToMove) {
-                File fileToMove = new File(fileInfo.toPath().toString());
+    public void apply() throws IOException {
+        for (FileInfo fileInfo : filesToMove) {
+            File fileToMove = new File(fileInfo.toPath().toString());
 
-                Path src = fileToMove.toPath();
+            Path src = fileToMove.toPath();
 
-                File destDirectory = new File(moveDestination);
-                if (!destDirectory.exists()) {
-                    // Create necessary directories.
-                    Files.createDirectories(destDirectory.toPath());
-
-                }
-
-                Path dest = Paths.get(moveDestination + "\\" + fileInfo.getName());
-
-//                Path destAfterMoving = Files.move(src, dest);
-                Files.move(src, dest, StandardCopyOption.ATOMIC_MOVE);
-
-//                if (destAfterMoving == null) {
-//                    System.out.println("Unable to move the file: " + src.getFileName());
-//                }
-
+            File destDirectory = new File(moveDestination);
+            if (!destDirectory.exists()) {
+                // Create necessary directories.
+                Files.createDirectories(destDirectory.toPath());
             }
-        } catch (IOException e) {
-//            e.printStackTrace();
-            System.err.println("Move failed: " + e.getMessage());
+
+            Path dest = Paths.get(moveDestination + "\\" + fileInfo.getName());
+
+            Files.move(src, dest, StandardCopyOption.ATOMIC_MOVE);
         }
-
-    }
-
-    @Override
-    public String getLogString() {
-        return null;
     }
 }

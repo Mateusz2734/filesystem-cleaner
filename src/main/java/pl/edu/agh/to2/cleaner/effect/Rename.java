@@ -40,9 +40,4 @@ public class Rename implements IOSideEffect {
         fileInfo.setName(newFileName);
         fileInfo.setPath(renamedPath.toString());
     }
-
-    @Override
-    public String getLogString() {
-        return null;
-    }
 }
