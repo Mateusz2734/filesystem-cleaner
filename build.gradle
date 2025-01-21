@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '3.4.1'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'com.github.node-gradle.node' version '7.1.0'
-    id 'org.jetbrains.kotlin.jvm'
 }
 
 group 'pl.edu.agh.to2'
@@ -39,8 +38,6 @@ dependencies {
     implementation "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
     implementation "org.glassfish.jaxb:jaxb-runtime:4.0.5"
 
-//    implementation 'org.slf4j:slf4j-api:2.0.9' // Version of SLF4J
-//    implementation 'ch.qos.logback:logback-classic:1.4.12' // Version of Logback
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -50,32 +47,24 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
-//node {
-//    version = '18.16.0'
-//    download = true
-//    workDir = file("${project.buildDir}/nodejs")
-//    npmWorkDir = file("${project.buildDir}/npm")
-//}
-//
-//task buildFrontend(type: NpmTask) {
-//    dependsOn npmInstall
-//    args = ['run', 'build']
-//    doFirst {
-//        workingDir = file("$projectDir/frontend")
-//    }
-//
-//    doLast {
-//        copy {
-//            from "$projectDir/frontend/dist"
-//            into "$buildDir/resources/main/static"
-//        }
-//    }
-//}
+node {
+    version = '18.16.0'
+    download = true
+    workDir = file("${project.buildDir}/nodejs")
+    npmWorkDir = file("${project.buildDir}/npm")
+}
 
-//tasks.named('processResources') {
-//    dependsOn buildFrontend
-//}
+tasks.register('buildFrontend', NpmTask) {
+    dependsOn npmInstall
+    args = ['run', 'build']
+    doFirst {
+        workingDir = file("$projectDir/frontend")
+    }
 
-//tasks.bootRun {
-//    dependsOn npmInstall
-//}
+    doLast {
+        copy {
+            from "$projectDir/frontend/dist"
+            into "$buildDir/resources/main/static"
+        }
+    }
+}
