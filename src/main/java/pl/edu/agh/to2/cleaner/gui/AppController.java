@@ -58,8 +58,10 @@ public class AppController {
     public void setStageSettings() {
         this.stage.setTitle("Cleaner 2025");
         this.stage.setResizable(false);
-        this.stage.setWidth(960);
-        this.stage.setHeight(540);
+
+        // NEED TO MATCH STAGE AND SCENES SIZES
+        this.stage.setWidth(980);
+        this.stage.setHeight(560);
     }
 
     // Method used by presenters to change between each others
@@ -87,6 +89,14 @@ public class AppController {
             return resultsPresenter.setDirectory(directory) && resultsPresenter.setSearchingTypes(searchTypes);
         }
         return false;
+    }
+
+    public void searchFiles() {
+        Presenter presenter = presenters.get("results");
+
+        if (presenter instanceof ResultsPresenter resultsPresenter) {
+            resultsPresenter.searchForFiles();
+        }
     }
 }
 
