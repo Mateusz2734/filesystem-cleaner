@@ -3,33 +3,38 @@ package pl.edu.agh.to2.cleaner.gui.presenter;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
+import pl.edu.agh.to2.cleaner.command.FileDuplicateFinder;
 import pl.edu.agh.to2.cleaner.command.FileFinder;
+import pl.edu.agh.to2.cleaner.command.FileTreeIndexer;
+import pl.edu.agh.to2.cleaner.command.UnionFind;
 import pl.edu.agh.to2.cleaner.gui.AppController;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 import pl.edu.agh.to2.cleaner.repository.FileInfoRepository;
 import pl.edu.agh.to2.cleaner.session.SessionService;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ResultsPresenter implements Presenter{
 
-    private SessionService sessionService = new SessionService();
-    private FileInfoRepository fileInfoRepository;
-    private AppController appController;
-//    private ObjectProperty<String> directory = new SimpleObjectProperty<>();
+    private final SessionService sessionService = new SessionService();
+    private final FileInfoRepository repository = new FileInfoRepository(sessionService);
+    private final FileTreeIndexer indexer = new FileTreeIndexer(repository);
+
+    private AppController appController = new AppController();
     private List<FileFinder> searchingTypes = new ArrayList<>();
     private ObjectProperty<Path> path = new SimpleObjectProperty<>();
+    private ObservableList<List<Set<FileInfo>>> searchResultList;
 
     @FXML
     private Button backButton;
@@ -53,11 +58,10 @@ public class ResultsPresenter implements Presenter{
     private Label receivedPath;
 
     @FXML
-    private ListView<HBox> searchListView;
+    private ListView<FileInfo> searchListView;
 
 
     public ResultsPresenter() {
-        this.fileInfoRepository = new FileInfoRepository(sessionService);
     }
 
     @Override
@@ -65,13 +69,13 @@ public class ResultsPresenter implements Presenter{
         this.appController = AppController.getInstance();
         path.addListener((source, oldValue, newValue) -> {
 //            if (path.getValue() != null && !path.getValue().isEmpty()) {
-            if (validatePath(path.getValue().toString())) {
+//            if (validatePath(path.getValue().toString())) {
                 receivedPath.setText(path.getValue().toString());
                 System.out.println(path.getValue().toString());
-            }
-            else {
-                receivedPath.setText("NO DIRECTORY");
-            }
+//            }
+//            else {
+//                receivedPath.setText("NO DIRECTORY");
+//            }
         });
 
 
@@ -79,12 +83,15 @@ public class ResultsPresenter implements Presenter{
 //        for (int i = 0; i < 10; i++) {
 //            searchListView.getItems().add(new);
 //        }
+//        searchListView.getItems().add("JERY");
+//        searchListView.getItems().add("COS");
+//        searchListView.getItems().add("TAM");
 
         // Bindings
-//        deleteButton.disableProperty().bind(Bindings.isEmpty(searchPane.getSelec));
-//        archiveButton;
-//        moveButton;
-//        renameButton
+        deleteButton.disableProperty().bind(Bindings.isEmpty(searchListView.getSelectionModel().getSelectedItems()));
+        archiveButton.disableProperty().bind(Bindings.isEmpty(searchListView.getSelectionModel().getSelectedItems()));
+        moveButton.disableProperty().bind(Bindings.isEmpty(searchListView.getSelectionModel().getSelectedItems()));
+        renameButton.disableProperty().bind(Bindings.isEmpty(searchListView.getSelectionModel().getSelectedItems()));
     }
 
     public boolean setDirectory(String stringPath) {
@@ -129,7 +136,7 @@ public class ResultsPresenter implements Presenter{
     }
 
     @FXML
-    public void gobackHandle() {
+    public void goToFileChooser() {
         appController.changeScene("fileChoose");
     }
 
@@ -144,4 +151,54 @@ public class ResultsPresenter implements Presenter{
         }
         return false;
     }
+
+    public void searchForFiles() {
+        if (repository.getByPath(path.getValue().toString()).isEmpty()) {
+            try {
+                indexer.index(path.getValue());
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<FileInfo> filesToSearch = repository.getDescendants(path.getValue());
+
+        for (FileFinder fileFinder : searchingTypes) {
+            getFilesInGroups(filesToSearch, fileFinder);
+        }
+
+    }
+
+    private List<Set<FileInfo>> getFilesInGroups(List<FileInfo> files, FileFinder fileFinder) {
+        fileFinder.setFiles(files);
+        var connections = fileFinder.find();
+        var groups = new UnionFind().connectedComponentsFromEdges(connections);
+        String searchType = fileFinder.getClass().getSimpleName();
+
+        switch (searchType) {
+            case "FileDuplicateFinder":
+                System.out.println("Duplicates:");
+                break;
+            case "FileVersionsFinder":
+                System.out.println("Versions:");
+                break;
+        }
+
+        if (groups.isEmpty()) {
+            System.out.println("No files found with that criteria");
+        }
+        else {
+            for (var group : groups) {
+                System.out.println("Group:");
+                for (var file : group) {
+                    System.out.println("\t" + file.getPath());
+                }
+            }
+        }
+
+        return groups;
+    }
+
+
 }

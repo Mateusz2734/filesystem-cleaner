@@ -3,23 +3,20 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.ListView?>
 <VBox prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.agh.to2.cleaner.gui.presenter.ResultsPresenter">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#gobackHandle" text="Powrót" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goToFileChooser" text="Powrót" />
             <Label fx:id="receivedPath">
                <HBox.margin>
                   <Insets left="100.0" />
                </HBox.margin>
             </Label>
-            <Button fx:id="searchButton" mnemonicParsing="false" text="Szukaj" />
          </children>
          <padding>
             <Insets left="10.0" />
@@ -28,37 +25,35 @@
             <Insets />
          </VBox.margin>
       </HBox>
-      <HBox prefHeight="336.0" prefWidth="960.0">
+      <HBox prefHeight="381.0" prefWidth="960.0">
          <children>
-            <ListView fx:id="searchListView" prefHeight="320.0" prefWidth="622.0">
-
-            </ListView>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="211.0" prefWidth="478.0" />
+            <ListView fx:id="searchListView" prefHeight="382.0" prefWidth="1027.0" />
+            <VBox alignment="CENTER" prefHeight="336.0" prefWidth="359.0">
+               <children>
+                  <Button fx:id="deleteButton" mnemonicParsing="false" text="Delete">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="archiveButton" mnemonicParsing="false" text="Archive">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="moveButton" mnemonicParsing="false" text="Move">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="renameButton" mnemonicParsing="false" text="Rename">
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Button fx:id="deleteButton" mnemonicParsing="false" text="Delete">
-               <HBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="archiveButton" mnemonicParsing="false" text="Archive">
-               <HBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="moveButton" mnemonicParsing="false" text="Move">
-               <HBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="renameButton" mnemonicParsing="false" text="Rename">
-               <HBox.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
+      <HBox prefHeight="52.0" prefWidth="960.0" />
    </children>
 </VBox>

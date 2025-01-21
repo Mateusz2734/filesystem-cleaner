@@ -90,5 +90,13 @@ public class AppController {
         }
         return false;
     }
+
+    public void searchFiles() {
+        Presenter presenter = presenters.get("results");
+
+        if (presenter instanceof ResultsPresenter resultsPresenter) {
+            resultsPresenter.searchForFiles();
+        }
+    }
 }
 

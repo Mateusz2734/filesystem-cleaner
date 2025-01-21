@@ -121,6 +121,7 @@ public class FileChoosePresenter implements Presenter{
             errorLabel.setText("Invalid input!");
         }
         else {
+            appController.searchFiles();
             appController.changeScene("results");
         }
     }
