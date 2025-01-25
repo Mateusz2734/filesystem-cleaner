@@ -73,9 +73,14 @@ export function LogPage() {
     useEffect(() => {
         const fetchLogs = async () => {
             const response = await fetch('/api/log');
+
+            if (response.status !== 200) {
+                return;
+            }
             const data: ActionLogItem[] = await response.json();
 
             setLogs(data);
+
         };
 
         fetchLogs();
