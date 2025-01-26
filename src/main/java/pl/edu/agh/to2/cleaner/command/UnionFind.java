@@ -6,25 +6,22 @@ import pl.edu.agh.to2.cleaner.model.FileInfo;
 import java.util.*;
 
 public class UnionFind {
-    private static final Map<FileInfo, FileInfo> parent = new HashMap<>();
-    private static final Map<FileInfo, Integer> rank = new HashMap<>();
-
-    private static synchronized void addElement(FileInfo element) {
+    private static void addElement(FileInfo element, Map<FileInfo, FileInfo> parent, Map<FileInfo, Integer> rank) {
         parent.putIfAbsent(element, element);
         rank.putIfAbsent(element, 0);
     }
 
-    private static synchronized FileInfo find(FileInfo element) {
+    private static FileInfo find(FileInfo element, Map<FileInfo, FileInfo> parent) {
         if (!parent.get(element).equals(element)) {
-            parent.put(element, find(parent.get(element)));
+            parent.put(element, find(parent.get(element), parent));
         }
         return parent.get(element);
     }
 
 
-    private static synchronized void union(FileInfo a, FileInfo b) {
-        FileInfo rootA = find(a);
-        FileInfo rootB = find(b);
+    private static void union(FileInfo a, FileInfo b, Map<FileInfo, FileInfo> parent, Map<FileInfo, Integer> rank) {
+        FileInfo rootA = find(a, parent);
+        FileInfo rootB = find(b, parent);
         if (!rootA.equals(rootB)) {
             if (rank.get(rootA) > rank.get(rootB)) {
                 parent.put(rootB, rootA);
@@ -38,21 +35,21 @@ public class UnionFind {
     }
 
     public static List<Set<FileInfo>> connectedComponentsFromEdges(List<ImmutablePair<FileInfo, FileInfo>> connections) {
-        parent.clear();
-        rank.clear();
+        final Map<FileInfo, FileInfo> parent = new HashMap<>();
+        final Map<FileInfo, Integer> rank = new HashMap<>();
 
         for (ImmutablePair<FileInfo, FileInfo> edge : connections) {
-            addElement(edge.getLeft());
-            addElement(edge.getRight());
+            addElement(edge.getLeft(), parent, rank);
+            addElement(edge.getRight(), parent, rank);
         }
 
         for (ImmutablePair<FileInfo, FileInfo> edge : connections) {
-            union(edge.getLeft(), edge.getRight());
+            union(edge.getLeft(), edge.getRight(), parent, rank);
         }
 
         Map<FileInfo, Set<FileInfo>> components = new HashMap<>();
         for (FileInfo element : parent.keySet()) {
-            FileInfo root = find(element);
+            FileInfo root = find(element, parent);
             components.computeIfAbsent(root, k -> new HashSet<>()).add(element);
         }
 
