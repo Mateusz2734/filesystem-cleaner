@@ -20,7 +20,7 @@ public class Grouping {
 
         {
             var connections = new FileVersionsFinder(files).find();
-            var groups = new UnionFind().connectedComponentsFromEdges(connections);
+            var groups = UnionFind.connectedComponentsFromEdges(connections);
 
             System.out.println("Versions (similar name):");
             for (var group : groups) {
@@ -35,7 +35,7 @@ public class Grouping {
 
         {
             var connections = new FileDuplicateFinder(files).find();
-            var groups = new UnionFind().connectedComponentsFromEdges(connections);
+            var groups = UnionFind.connectedComponentsFromEdges(connections);
 
             System.out.println("Duplicates (same size and name):");
             for (var group : groups) {

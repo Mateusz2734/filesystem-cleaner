@@ -6,22 +6,23 @@ import pl.edu.agh.to2.cleaner.model.FileInfo;
 import java.util.*;
 
 public class UnionFind {
-    private final Map<FileInfo, FileInfo> parent = new HashMap<>();
-    private final Map<FileInfo, Integer> rank = new HashMap<>();
+    private static final Map<FileInfo, FileInfo> parent = new HashMap<>();
+    private static final Map<FileInfo, Integer> rank = new HashMap<>();
 
-    private void addElement(FileInfo element) {
+    private static synchronized void addElement(FileInfo element) {
         parent.putIfAbsent(element, element);
         rank.putIfAbsent(element, 0);
     }
 
-    private FileInfo find(FileInfo element) {
+    private static synchronized FileInfo find(FileInfo element) {
         if (!parent.get(element).equals(element)) {
             parent.put(element, find(parent.get(element)));
         }
         return parent.get(element);
     }
 
-    private void union(FileInfo a, FileInfo b) {
+
+    private static synchronized void union(FileInfo a, FileInfo b) {
         FileInfo rootA = find(a);
         FileInfo rootB = find(b);
         if (!rootA.equals(rootB)) {
@@ -36,7 +37,10 @@ public class UnionFind {
         }
     }
 
-    public List<Set<FileInfo>> connectedComponentsFromEdges(List<ImmutablePair<FileInfo, FileInfo>> connections) {
+    public static List<Set<FileInfo>> connectedComponentsFromEdges(List<ImmutablePair<FileInfo, FileInfo>> connections) {
+        parent.clear();
+        rank.clear();
+
         for (ImmutablePair<FileInfo, FileInfo> edge : connections) {
             addElement(edge.getLeft());
             addElement(edge.getRight());
