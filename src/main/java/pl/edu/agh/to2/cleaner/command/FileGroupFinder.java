@@ -20,6 +20,7 @@ public abstract class FileGroupFinder implements FileFinder {
         this.comparator = comparator;
     }
 
+    @Override
     public List<ImmutablePair<FileInfo, FileInfo>> find() {
         var connections = new ArrayList<ImmutablePair<FileInfo, FileInfo>>();
 
