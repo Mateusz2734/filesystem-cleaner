@@ -5,9 +5,18 @@
 
 #### Autorzy:
 * Maksymilian Katolik
-* Mateusz Wala
 * Mikołaj Nietupski
+* Mateusz Wala
 * Marcin Walendzik
+
+***
+
+### Sposób uruchomienia projektu
+Do poprawnego uruchomienia serwera do embeddingu wymagane jest zinstalowanie pakietów z pliku `requirements.txt`.
+
+Przed pierwszym uruchomieniem projektu, należy wykorzystać `./gradlew buildFrontend` aby przygotować pliki frontendowe.
+
+Aby uruchomić serwer należy wykorzystać komendę `./gradlew run`.
 
 ***
 
@@ -54,11 +63,8 @@ Funkcjonalności do zrealizowania na ten etap:
 
 Wykorzystana technologia: **Hibernate**
 
-Aktualnie baza danych programu składa się z jednej tablicy, 
+Aktualnie baza danych programu składa się z jednej tabeli, 
 stworzonej na podstawie klasy FileInfo. Przechowuje ona dane
 reprezentacji plików w programie.
 
 ![](/resources/database-scheme.png)
-
-## Wykorzystywane biblioteki
-- [AtlantaFX](https://github.com/mkpaz/atlantafx) -Projekt jest dostępny na licencji MIT. Szczegóły znajdują się w pliku [LICENSE](LICENSE)

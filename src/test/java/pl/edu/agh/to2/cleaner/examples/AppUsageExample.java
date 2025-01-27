@@ -1,133 +1,121 @@
 package pl.edu.agh.to2.cleaner.examples;
 
-import jakarta.persistence.PersistenceException;
-import pl.edu.agh.to2.cleaner.effect.Archive;
-import pl.edu.agh.to2.cleaner.effect.Move;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import pl.edu.agh.to2.cleaner.command.FileDuplicateFinder;
+import pl.edu.agh.to2.cleaner.command.FileVersionsFinder;
+import pl.edu.agh.to2.cleaner.command.UnionFind;
+import pl.edu.agh.to2.cleaner.model.EmbeddingServerClient;
+import pl.edu.agh.to2.cleaner.model.FileContentEmbedder;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 import pl.edu.agh.to2.cleaner.repository.FileInfoRepository;
-import pl.edu.agh.to2.cleaner.session.SessionService;
+import pl.edu.agh.to2.cleaner.service.FileIndexService;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class AppUsageExample {
-    private static final Logger logger = LoggerFactory.getLogger(AppUsageExample.class);
-    private final SessionService sessionService = new SessionService();
-    private final FileInfoRepository repository = new FileInfoRepository(sessionService);
-    private final String rootDirectoryPath;
+@SpringBootApplication(exclude = {WebMvcAutoConfiguration.class})
+@ComponentScan(basePackages = "pl.edu.agh.to2.cleaner")
+public class AppUsageExample implements CommandLineRunner {
+    private static final Path path = Path.of("example_dir"); // Example directory
+    private static final String keyword = "macbeth"; // Example keyword
 
-    public AppUsageExample(String rootDirectoryPath) {
-        this.rootDirectoryPath = rootDirectoryPath;
-    }
+    @Autowired
+    private FileInfoRepository repository;
 
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Set<Object> seen = ConcurrentHashMap.newKeySet();
-        return t -> seen.add(keyExtractor.apply(t));
-    }
+    @Autowired
+    private FileIndexService indexer;
 
     public static void main(String[] args) {
-        AppUsageExample appUsageExample = new AppUsageExample("example_dir");
-        appUsageExample.demoNormal();
-//		appUsageExample.demoArchive();
-//		appUsageExample.demoMove();
-
-
+        SpringApplication.exit(SpringApplication.run(AppUsageExample.class, args));
     }
 
-    private void addFile(File file) {
-        if (file.isFile()) {
-            var fileInfo = new FileInfo(file);
-            System.out.println(fileInfo.describe());
+    @Override
+    public void run(String... args) {
+        System.out.println("Starting the server...");
+        new Thread(EmbeddingServerClient::run).start();
+
+        System.out.println("Waiting for the server to be able to embed...");
+        while (!EmbeddingServerClient.ping()) {
             try {
-                repository.add(fileInfo);
-                logger.info("File %s added successfully.".formatted(fileInfo.getName()));
-            } catch (PersistenceException e) {
-                logger.error("Failed to add file: %s".formatted(fileInfo.getName()));
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {}
+        }
+
+        System.out.println("Server is ready to embed.\n");
+        System.out.println("Indexing the root directory...");
+
+        indexer.performIndexing(path);
+
+        System.out.println("Indexing finished successfully.\n");
+
+        System.out.println("Embedding keyword...");
+        var embedding = EmbeddingServerClient.fetchEmbedding(keyword);
+
+        if (embedding != null) {
+            System.out.println("Keyword embedded successfully.\n");
+        } else {
+            System.out.println("Failed to embed the keyword.");
+            return;
+        }
+
+        var filesToSearch = repository.getDescendants(path);
+
+        System.out.println("Searching for most similar files...");
+        getMostSimilar(embedding, filesToSearch);
+        System.out.println();
+
+        versions(filesToSearch);
+        System.out.println();
+
+        duplicates(filesToSearch);
+        System.out.println();
+
+        System.out.println("Shutting down the server...");
+        EmbeddingServerClient.shutdown();
+    }
+
+    private static void duplicates(List<FileInfo> files) {
+        var connections = new FileDuplicateFinder(files).find();
+        var groups = UnionFind.connectedComponentsFromEdges(connections);
+
+        System.out.println("Duplicates (same size and name):");
+        for (var group : groups) {
+            System.out.println("Group:");
+            for (var file : group) {
+                System.out.println("\t" + file.getPath());
             }
         }
     }
 
-    private List<FileInfo> loadFilesIntoList(Path directoryPath) {
-        List<FileInfo> filesToArchive;
-        try {
-            filesToArchive = Files.walk(directoryPath).map(Path::toFile).filter(file -> !file.isDirectory()).map(FileInfo::new).filter(distinctByKey(FileInfo::getName)).limit(2).toList();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return filesToArchive;
-    }
+    private static void versions(List<FileInfo> files) {
+        var connections = new FileVersionsFinder(files).find();
+        var groups = UnionFind.connectedComponentsFromEdges(connections);
 
-    private void printPathsInDirectory(Path directoryPath) {
-        try {
-            Files.walk(directoryPath).forEach(path -> addFile(path.toFile()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        System.out.println("Versions (similar name):");
+        for (var group : groups) {
+            System.out.println("Group:");
+            for (var file : group) {
+                System.out.println("\t" +file.getPath());
+            }
         }
     }
 
-    public void demoNormal() {
-        Path dir = Paths.get(rootDirectoryPath);
-        try {
-            Files.walk(dir).forEach(path -> addFile(path.toFile()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private static void getMostSimilar(Float[] embedding, List<FileInfo> files) {
+        var mostSimilar = files.stream()
+                .map(file -> new Object() {
+                    final double similarity = FileContentEmbedder.cosineSimilarity(file.getEmbedding(), embedding);
+                    final String path = file.getPath();
+                })
+                .sorted((a, b) -> Double.compare(b.similarity, a.similarity))
+                .limit(2)
+                .toList();
 
-        System.out.println("ALL DESCENDANT FILES");
-        for (FileInfo fileInfo : repository.getDescendants(rootDirectoryPath)) {
-            System.out.printf("--> %s (size: %d)%n", fileInfo.getName(), fileInfo.getSize());
-        }
-
-        System.out.println("TOP FILES (by size)");
-        for (FileInfo fileInfo : repository.getLargestFiles(rootDirectoryPath, 3)) {
-            System.out.printf("--> %s (size: %d)%n", fileInfo.getName(), fileInfo.getSize());
-        }
-
-        sessionService.close();
-        logger.info("A demonstration of typical app functionalities has just finished!");
-    }
-
-    public void demoArchive() throws IOException {
-        var dir = Paths.get(rootDirectoryPath);
-        var filesToArchive = loadFilesIntoList(dir);
-
-        // Print the names of the files that will be archived.
-        filesToArchive.forEach(fileInfo -> System.out.println("zip <- " + fileInfo.getName()));
-
-        // Archive the files.
-        Archive archive = new Archive(filesToArchive, rootDirectoryPath);
-        archive.apply();
-
-        // Print the directories and files within the given root directory
-        // in order to see what has changed.
-        printPathsInDirectory(dir);
-    }
-
-    public void demoMove() throws IOException {
-        Path dir = Paths.get(rootDirectoryPath);
-        List<FileInfo> filesToMove = loadFilesIntoList(dir);
-
-        // Print the names of the files that will be moved.
-        filesToMove.forEach(fileInfo -> System.out.println("(moved) <- " + fileInfo.getName()));
-
-        // Move the files.
-        String moveDestStr = rootDirectoryPath + "\\moved";
-        Move move = new Move(filesToMove, moveDestStr);
-        move.apply();
-
-        // Print the directories and files within the given root directory
-        // in order to see what has changed.
-        printPathsInDirectory(dir);
+        mostSimilar.forEach(file -> System.out.printf("%s - %.2f\n", file.path, file.similarity));
     }
 }

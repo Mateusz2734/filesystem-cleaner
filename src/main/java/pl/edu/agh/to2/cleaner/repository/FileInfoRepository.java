@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityManager;
 import pl.edu.agh.to2.cleaner.model.FileInfo;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -54,49 +55,31 @@ public class FileInfoRepository {
 
     @Transactional(readOnly = true)
     public Optional<FileInfo> findByPath(String path) {
-        return fileInfoJpaRepository.findByPath(path);
+        String normalizedPath = FilenameUtils.separatorsToUnix(path);
+        return fileInfoJpaRepository.findByPath(normalizedPath);
     }
 
     @Transactional
     public List<FileInfo> getLargestFiles(String root, int limit) {
         String normalizedRoot = normalizeRootDirectoryPath(root);
-        return fileInfoJpaRepository.findByPathStartingWithOrderBySizeDescLimitK(normalizedRoot, limit);
+        return fileInfoJpaRepository.findByPathStartingWithOrderBySizeDescLimitK(normalizedRoot + "%", limit);
     }
 
     @Transactional
-    public boolean move(FileInfo fileInfo, String newPath) {
-        // First, check if the new path is already taken
+    public Optional<FileInfo> changePathAndName(FileInfo fileInfo, String newPath, String newName) {
+        newPath = normalizeRootDirectoryPath(newPath);
         if (findByPath(newPath).isEmpty()) {
-            // Remove old entity
-            entityManager.remove(entityManager.contains(fileInfo) ? fileInfo : entityManager.merge(fileInfo));
+            entityManager.remove(fileInfo);
 
-            // Update path and save as new entity
-            fileInfo.setPath(newPath);
-            entityManager.merge(fileInfo);
-            return true;
+            var newFileInfo = new FileInfo(newPath, newName, fileInfo.getSize(), fileInfo.getModificationTimeMS(), fileInfo.getCreationTimeMS());
+            newFileInfo.setEmbedding(fileInfo.getEmbedding());
+            newFileInfo.setChecksum(fileInfo.getChecksum());
+            entityManager.merge(newFileInfo);
+            return Optional.of(newFileInfo);
         }
-        return false;
+        return Optional.empty();
     }
 
-    @Transactional
-    public boolean rename(FileInfo fileInfo, String newName) {
-        String newPath = FilenameUtils.separatorsToUnix(
-                FilenameUtils.getFullPath(fileInfo.getPath()) + newName
-        );
-
-        // Similar to move, but updating name and path
-        if (findByPath(newPath).isEmpty()) {
-            // Remove old entity
-            entityManager.remove(entityManager.contains(fileInfo) ? fileInfo : entityManager.merge(fileInfo));
-
-            // Update name and path
-            fileInfo.setName(newName);
-            fileInfo.setPath(newPath);
-            entityManager.merge(fileInfo);
-            return true;
-        }
-        return false;
-    }
 
     private String normalizeRootDirectoryPath(String root) {
         // Conversion for root: <relative path> -> <absolute path>.

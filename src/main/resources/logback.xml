@@ -15,12 +15,10 @@
         </encoder>
     </appender>
 
-    <appender name="ACTION_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="ACTION_LOG" class="ch.qos.logback.core.FileAppender">
         <file>logs/actions.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/actions.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>7</maxHistory>
-        </rollingPolicy>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss}|%msg%n</pattern>
         </encoder>
