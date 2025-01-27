@@ -1,12 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export type FileInfo = {
-    path: string;
-    size: number;
-    modifiedAt: string;
-    createdAt: string;
-};
+import { FileInfo } from "@/app/model";
+
 
 function formatFileSize(bytes: number): string {
     if (bytes === 0) return "0 B";

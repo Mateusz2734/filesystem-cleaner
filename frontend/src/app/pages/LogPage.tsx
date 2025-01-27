@@ -1,4 +1,4 @@
-import { ArrowBigRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import React, { useEffect } from 'react';
 
 import { Alert } from '@/components/ui/alert';
@@ -46,7 +46,9 @@ const LogItem: React.FC<ActionLogItem> = ({ datetime, method, file1, file2 }: Ac
             </div>
             <div className='w-[41.66%] flex'>
                 {method !== 'DELETE' && <>
-                    <ArrowBigRight className='w-[25%]' />
+                    <div className="w-[25%] flex justify-center items-center">
+                        <ArrowRight size="16" />
+                    </div>
                     <div className="w-[75%] flex justify-center">
                         <FileNameBadge file={file2} />
                     </div>
@@ -87,7 +89,7 @@ export function LogPage() {
     }, []);
 
     return (
-        <div className="flex flex-col items-center justify-center w-full h-full space-y-2">
+        <div className="flex flex-col items-center justify-center w-full space-y-2">
             {
                 logs.length === 0
                     ? <Card className='w-[30em]'><CardHeader>

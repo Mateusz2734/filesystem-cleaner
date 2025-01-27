@@ -33,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton onClick={() => navigate(item.url)} isActive={currentLocation === item.url} disabled={group.later && (!indexingDone || isIndexing)}>
+                    <SidebarMenuButton onClick={() => navigate(item.url)} isActive={currentLocation === item.url} disabled={group.later && ((!indexingDone || isIndexing) || !currentRoot)}>
                       {item.title}
                     </SidebarMenuButton>
                   </SidebarMenuItem>

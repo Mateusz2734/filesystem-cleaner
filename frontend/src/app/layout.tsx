@@ -15,7 +15,7 @@ export function Layout() {
           <Separator orientation="vertical" className="mr-2 h-4" />
           <DynamicBreadcrumbs />
         </header>
-        <main className="p-4 flex flex-col w-full items-center">
+        <main className="p-4 flex flex-col w-full h-full items-center">
           <Outlet />
         </main>
       </SidebarInset>

@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { FileInfo, columns } from "@/components/data-table-columns";
+import { columns } from "@/components/data-table-columns";
 import { DataTable } from "@/components/data-table";
 import { useIndexingStore } from "@/hooks/store";
 
+import { GroupInfo } from "@/app/model";
 
-export type GroupInfo = {
-  reason: string;
-  files: FileInfo[];
-};
 
 export function GroupsPage() {
   const [groups, setGroups] = useState<GroupInfo[]>([]);
@@ -41,9 +38,11 @@ export function GroupsPage() {
 
   return (
     <div className="w-[80%] space-y-10">
-      {groups.length !== 0 && groups.map((group, index) => (
-        <DataTable key={index} columns={columns} data={group.files} reason={group.reason} />
-      ))}
+      {groups.length !== 0 && groups.map((group, index) => {
+        const filteredFiles = group.files.filter((file) => file.path.endsWith('txt'));
+        console.log(filteredFiles);
+        return <DataTable key={index} columns={columns} data={filteredFiles} reason={group.reason} />;
+      })}
     </div>
   );
 }

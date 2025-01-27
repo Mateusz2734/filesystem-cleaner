@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -17,13 +18,94 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Badge } from "./ui/badge";
-import { FileInfo } from "./data-table-columns";
+
+import { FileInfo } from "@/app/model";
+import { useIndexingStore } from "@/hooks/store";
 
 interface DataTableProps<TValue> {
     columns: ColumnDef<FileInfo, TValue>[];
     data: FileInfo[];
     reason: string;
+}
+
+interface FileOperationProps {
+    filenames: string[];
+    destination?: string;
+}
+
+// Modify functions to use the interface
+function deleteFiles(props: FileOperationProps) {
+    return fetch('/api/file/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(props.filenames),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Delete operation failed');
+            }
+            return response.json();
+        })
+        .catch((error) => {
+            console.error('Error deleting files:', error);
+            throw error;
+        });
+}
+
+function moveFiles(props: FileOperationProps) {
+    if (!props.destination) {
+        throw new Error('Destination is required for move operation');
+    }
+
+    return fetch('/api/file/move', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            files: props.filenames,
+            destination: props.destination
+        }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Move operation failed');
+            }
+            return response.json();
+        })
+        .catch((error) => {
+            console.error('Error moving files:', error);
+            throw error;
+        });
+}
+
+function archiveFiles(props: FileOperationProps) {
+    if (!props.destination) {
+        throw new Error('Destination is required for archive operation');
+    }
+
+    return fetch('/api/file/archive', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            files: props.filenames,
+            destination: props.destination
+        }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Archive operation failed');
+            }
+            return response.json();
+        })
+        .catch((error) => {
+            console.error('Error archiving files:', error);
+            throw error;
+        });
 }
 
 export function DataTable<TValue>({
@@ -33,6 +115,7 @@ export function DataTable<TValue>({
 }: DataTableProps<TValue>) {
     const [data, setData] = React.useState<FileInfo[]>(initialData);
     const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+    const { currentRoot } = useIndexingStore();
 
     const table = useReactTable({
         data,
@@ -49,28 +132,34 @@ export function DataTable<TValue>({
         return null;
     }
 
-    const handleRemoveSelected = () => {
+    const handleFiles = <T extends (props: FileOperationProps) => Promise<unknown>>(
+        fn: T,
+        destination?: string
+    ) => {
         const selectedIds = Object.keys(rowSelection);
 
         if (!selectedIds.length) {
             return;
         }
+
         const newData = data.filter((_, index) => !selectedIds.includes(index.toString()));
-        const toRemove = data.filter((_, index) => selectedIds.includes(index.toString())).map((item) => item.path);
+        const toBeWorked = data.filter((_, index) => selectedIds.includes(index.toString())).map((item) => item.path);
 
-        fetch('/api/file/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(toRemove),
-        }).then((response) => console.log(response)).catch(() => { });
+        // Prepare operation props
+        const operationProps: FileOperationProps = {
+            filenames: toBeWorked,
+            ...(destination && { destination })
+        };
 
-        setData(newData);
-        setRowSelection({});
+        fn(operationProps)
+            .then(() => {
+                setData(newData);
+                setRowSelection({});
+            })
+            .catch((error) => {
+                console.error('Operation failed:', error);
+            });
     };
-
-
 
     return (
         <div>
@@ -122,9 +211,9 @@ export function DataTable<TValue>({
                 </Table>
             </div>
             <div className="flex justify-end mt-4 gap-4 ">
-                <Button onClick={handleRemoveSelected} variant="destructive">Remove</Button>
-                <Button variant="secondary">Move</Button>
-                <Button variant="outline">Archive</Button>
+                <Button onClick={() => handleFiles(deleteFiles)} variant="destructive">Remove</Button>
+                <Button onClick={() => handleFiles(moveFiles, currentRoot)} variant="secondary">Move</Button>
+                <Button onClick={() => handleFiles(archiveFiles, currentRoot)} variant="outline">Archive</Button>
             </div>
         </div>
     );

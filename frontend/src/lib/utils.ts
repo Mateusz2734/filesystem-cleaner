@@ -39,12 +39,8 @@ export const data: NavGroup[] = [
         url: "/groups",
       },
       {
-        title: "Largest Files",
-        url: "/largest",
-      },
-      {
         title: "Search by Keyword",
-        url: "/keyword",
+        url: "/search",
       },
     ],
   },

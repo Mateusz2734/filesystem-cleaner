@@ -4,13 +4,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Alert, AlertTitle } from "@/components/ui/alert";
+import { FileFinder } from "@/components/file-finder";
 
 import { useIndexingStore } from "@/hooks/store";
 
@@ -27,24 +26,6 @@ function isAbsolutePath(path: string): boolean {
 function isDirectoryPath(path: string): boolean {
     return !/\.[a-zA-Z0-9]+$/.test(path);
 };
-
-
-function FileFinder() {
-    return (
-        <Popover>
-            <PopoverTrigger>
-                <Badge className="cursor-pointer ml-4">Help</Badge>
-            </PopoverTrigger>
-            <PopoverContent className="w-96 p-4 flex flex-col gap-4">
-                <p className="text-sm text-gray-400">
-                    Due to browser security restrictions, you must manually type or paste path of the root directory to index. This file input is provided solely to assist you in copying the path.
-                </p>
-                <Input type="file" />
-            </PopoverContent>
-        </Popover>
-    );
-}
-
 
 const formSchema = z.object({
     root: z.string().min(2, {
@@ -70,7 +51,7 @@ export function FileForm() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: FormValues) {
         const performIndexing = async () => {
             try {
                 const response = await fetch('/api/index/start', {
@@ -183,7 +164,7 @@ export const IndexingStatus: React.FC = () => {
                     <AlertTitle>No indexing history yet.</AlertTitle>
                 </Alert>}
 
-                {statusHistory.slice(0, 5).map((status, index) => (
+                {statusHistory.slice(0, 20).map((status, index) => (
                     <Alert className="mb-2" key={index}><AlertTitle className="p-0">{status}</AlertTitle></Alert>
                 ))}
             </CardContent>
