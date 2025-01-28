@@ -32,7 +32,7 @@ public class FileManipulationController {
 
         try {
             var destination = FilenameUtils.separatorsToUnix(moveRequest.getDestination());
-            fileService.move(moveRequest.getFiles(),destination);
+            fileService.move(moveRequest.getFiles(), destination);
             return ResponseEntity.ok(new ActionResponse("Files moved successfully"));
         } catch (Exception e) {
             log.error("Error moving files", e);

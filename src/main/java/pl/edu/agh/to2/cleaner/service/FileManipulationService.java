@@ -53,8 +53,6 @@ public class FileManipulationService {
         }
     }
 
-
-    //    TODO: Rethink code below
     public void move(List<String> filenames, String destination) {
         for (String filename : filenames) {
             try {
@@ -67,10 +65,11 @@ public class FileManipulationService {
 
                 var resolved = resolveUniqueDestinationPath(destination, file.getName());
 
-                if (repository.changePathAndName(file, resolved.getLeft(), resolved.getRight()).isPresent()) {
+                var changed = repository.changePathAndName(file, resolved.getLeft(), resolved.getRight());
+                if (changed.isPresent()) {
                     new Move(file, destination).apply();
 
-                    logger.info("MOVE|{}|{}", filename, resolved.getLeft());
+                    logger.info("MOVE|{}|{}", file.getPath(), changed.get().getPath());
                 }
             } catch (IOException ignored) {
             }
@@ -88,16 +87,19 @@ public class FileManipulationService {
             filesToArchive.add(optFile.get());
         }
 
-        Map<String, Integer> nameCounts = filesToArchive.stream().collect(HashMap::new, (map, file) -> map.merge(file.getName(), 1, Integer::sum), HashMap::putAll);
-
         try {
             List<FileInfo> resolvedFiles = resolveUniqueNames(filesToArchive, destination);
             new Archive(resolvedFiles, destination).apply();
 
             for (FileInfo file : resolvedFiles) {
                 repository.remove(file);
+            }
+            for (FileInfo file : filesToArchive) {
+                repository.remove(file);
                 logger.info("ARCHIVE|{}|{}", file.getPath(), destination + "/compressed.zip");
             }
+
+            repository.add(new FileInfo(Path.of(destination + "/compressed.zip")));
         } catch (IOException ignored) {
         }
     }
@@ -149,7 +151,6 @@ public class FileManipulationService {
 
         return FilenameUtils.separatorsToUnix(path.getParent().resolve(fileName).toString());
     }
-//    TODO: End of code to Rethink
 
     public List<FileManipulationController.FileMetadata> search(String query, String rootPath) {
         var embedding = EmbeddingServerClient.fetchEmbedding(query);

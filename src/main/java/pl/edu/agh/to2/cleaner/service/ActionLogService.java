@@ -48,8 +48,6 @@ public class ActionLogService {
             e.printStackTrace();
         }
 
-        // Reverse the list to maintain correct order
-        Collections.reverse(lines);
         return lines;
     }
 }

@@ -7,6 +7,9 @@ import java.util.zip.CRC32;
 
 public class FileContentEmbedder {
     public static double cosineSimilarity(Float[] vectorA, Float[] vectorB) {
+        if (vectorA == null || vectorB == null) {
+            return 0.0;
+        }
         var length = Math.min(vectorA.length, vectorB.length);
 
         double dotProduct = 0.0, normA = 0.0, normB = 0.0;
