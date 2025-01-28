@@ -23,8 +23,7 @@ public class UnionFindTest {
 
         var connections = List.of(new ImmutablePair<>(file1, file2));
 
-        var uf = new UnionFind();
-        var components = uf.connectedComponentsFromEdges(connections);
+        var components = UnionFind.connectedComponentsFromEdges(connections);
 
         assertEquals(1, components.size());
         assertTrue(components.get(0).contains(file1));
@@ -44,8 +43,7 @@ public class UnionFindTest {
 
         var connections = List.of(new ImmutablePair<>(file1, file2), new ImmutablePair<>(file5, file3), new ImmutablePair<>(file4, file2));
 
-        var uf = new UnionFind();
-        var components = uf.connectedComponentsFromEdges(connections);
+        var components = UnionFind.connectedComponentsFromEdges(connections);
 
         assertEquals(2, components.size());
         assertTrue(components.stream().anyMatch(component -> component.contains(file1) && component.contains(file2) && component.contains(file4)));
@@ -56,8 +54,7 @@ public class UnionFindTest {
     void connectedComponentsFromEdges_noConnections() {
         List<ImmutablePair<FileInfo, FileInfo>> connections = List.of();
 
-        var uf = new UnionFind();
-        var components = uf.connectedComponentsFromEdges(connections);
+        var components = UnionFind.connectedComponentsFromEdges(connections);
 
         assertEquals(0, components.size());
     }
@@ -74,8 +71,7 @@ public class UnionFindTest {
 
         var connections = List.of(new ImmutablePair<>(file1, file2), new ImmutablePair<>(file3, file4));
 
-        var uf = new UnionFind();
-        var components = uf.connectedComponentsFromEdges(connections);
+        var components = UnionFind.connectedComponentsFromEdges(connections);
 
         assertEquals(2, components.size());
         assertTrue(components.stream().anyMatch(component -> component.contains(file1) && component.contains(file2)));

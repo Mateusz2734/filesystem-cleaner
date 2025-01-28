@@ -4,6 +4,4 @@ import java.io.IOException;
 
 public interface IOSideEffect {
     void apply() throws IOException;
-
-    String getLogString();
 }

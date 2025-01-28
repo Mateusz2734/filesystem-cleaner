@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface FileFinder {
     List<ImmutablePair<FileInfo, FileInfo>> find();
-    void setFiles(List<FileInfo> files);
 }

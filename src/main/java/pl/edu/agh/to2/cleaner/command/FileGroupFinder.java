@@ -7,7 +7,7 @@ import pl.edu.agh.to2.cleaner.model.comparator.FileComparator;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class FileGroupFinder implements FileFinder {
+public abstract class FileGroupFinder implements FileFinder {
     private List<FileInfo> files;
     private final FileComparator comparator;
 
@@ -35,10 +35,5 @@ abstract class FileGroupFinder implements FileFinder {
             }
         }
         return connections;
-    }
-
-    @Override
-    public void setFiles(List<FileInfo> files) {
-        this.files = files;
     }
 }
