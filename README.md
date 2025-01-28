@@ -44,6 +44,16 @@ Funkcjonalności do zrealizowania na ten etap:
 
 ***
 
+## ETAP III
+Funkcjonalności do zrealizowania na ten etap:
+* Zrealizowanie warstwy frontendowej
+* Połączenie backendu z frontendem
+* Wykorzystanie loggera do funkcjonalności aplikacji
+* Przeniesienie projektu na framework SpringBoot
+* Aktualizacja `README.md`
+
+***
+
 ### Klasy porównywania plików
 ![](/resources/comparator.png)
 
@@ -56,8 +66,15 @@ Funkcjonalności do zrealizowania na ten etap:
 ### Warstwa persystencji
 ![](/resources/persistence.png)
 
-### Warstwa wyświetleniowa
-![](/resources/graphic-user-interface.png)
+### Frontend 
+Wykorzystane technologie:
+- **ReactJS**
+- **TypeScript**
+- **Vite**
+
+Uruchomienie frontendu powinno być poprzedzone opisanymi wyżej komendami zdefiniowanymi w `build.gradle` i opisanymi punkcie ze sposobem uruchomienia projektu. 
+W przypadku nie utworzenia automatycznie w wyniku `./gradlew buildFrontend` pakietu node_modules w pakiecie frontend należy wykonać w folderze frontend komendę 
+`npm install`.
 
 ### Schemat bazy danych
 
@@ -68,3 +85,12 @@ stworzonej na podstawie klasy FileInfo. Przechowuje ona dane
 reprezentacji plików w programie.
 
 ![](/resources/database-scheme.png)
+
+### Wersje modułów
+Poniżej znajdują się informacje na temat wersji ważniejszych narzędzi wykorzystywanych przy tym projekcie. Dla poniższych wersji projekt został przetestowany pomyślnie:
+* Java: 17.0
+* NodeJS: 20.14.0
+* Npm: 10.8.1
+* Python: 3.10
+* Hibernate: 6.6.0
+* SpringBoot: 3.4.1
