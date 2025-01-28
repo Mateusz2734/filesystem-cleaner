@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.5" pages="5">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.8" pages="5">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="comparator">
     <mxGraphModel dx="1290" dy="565" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -167,7 +167,7 @@
             <Array as="points" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="L4ZV5EJNv4xMWHJ9aP0x-1" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="Mpk-7AVUA3salqRv2yxr-5">
+        <mxCell id="L4ZV5EJNv4xMWHJ9aP0x-1" value="" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="Mpk-7AVUA3salqRv2yxr-5" edge="1">
           <mxGeometry width="160" relative="1" as="geometry">
             <mxPoint x="560" y="330" as="sourcePoint" />
             <mxPoint x="576" y="340" as="targetPoint" />
@@ -177,7 +177,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="L4ZV5EJNv4xMWHJ9aP0x-3" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" target="Mpk-7AVUA3salqRv2yxr-1">
+        <mxCell id="L4ZV5EJNv4xMWHJ9aP0x-3" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" target="Mpk-7AVUA3salqRv2yxr-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="570" y="400" as="sourcePoint" />
             <mxPoint x="670" y="310" as="targetPoint" />
@@ -280,69 +280,48 @@
     </mxGraphModel>
   </diagram>
   <diagram id="9FXGau8o8WmP6y33M3kj" name="persistence">
-    <mxGraphModel dx="1518" dy="665" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="583" math="0" shadow="0">
+    <mxGraphModel dx="1290" dy="565" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="583" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-1" value="&lt;i&gt;Repository&amp;lt;T&amp;gt;&lt;/i&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="91" y="90" width="190" height="120" as="geometry" />
+        <mxCell id="e1JNJbLfSPUfNoddy64d-1" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;FileInfoJpaRepository&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ findByPath(String) : Optional&amp;lt;FileInfo&amp;gt;&lt;br&gt;+ findByPathStartingWith(String) : List&amp;lt;FileInfo&amp;gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ findByPathStartingWithOrderBySizeDescLimitK&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;(String, int) : List&amp;lt;FileInfo&amp;gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="480" y="270" width="270" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-2" value="- sessionService: SessionService" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="SZ6bK4sAGu-eXTJ2Tl3F-1" vertex="1">
-          <mxGeometry y="26" width="190" height="26" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="SZ6bK4sAGu-eXTJ2Tl3F-1" vertex="1">
-          <mxGeometry y="52" width="190" height="8" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-4" value="+ add(T): Optional&amp;lt;T&amp;gt;&lt;div&gt;+ remove(T): boolean&lt;/div&gt;&lt;div&gt;+ currentSession(): Session&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="SZ6bK4sAGu-eXTJ2Tl3F-1" vertex="1">
-          <mxGeometry y="60" width="190" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-5" value="FileInfoRepository" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="66" y="321" width="240" height="110" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-8" value="+ getDescendants(String): List&amp;lt;FileInfo&amp;gt;&lt;div&gt;+ getDescendants(Path): List&amp;lt;FileInfo&amp;gt;&lt;div&gt;+ getByPath(String): Optional&amp;lt;FileInfo&amp;gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+ move(FileInfo, String): boolean&lt;/div&gt;&lt;div&gt;+ rename(FileInfo, String): boolean&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="SZ6bK4sAGu-eXTJ2Tl3F-5" vertex="1">
-          <mxGeometry y="26" width="240" height="84" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-9" value="SessionService" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="491" y="300" width="270" height="168" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-10" value="- sessionFactory: SessionFactory&lt;div&gt;- session: Session&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="SZ6bK4sAGu-eXTJ2Tl3F-9" vertex="1">
-          <mxGeometry y="26" width="270" height="34" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-11" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="SZ6bK4sAGu-eXTJ2Tl3F-9" vertex="1">
-          <mxGeometry y="60" width="270" height="10" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-12" value="+ openSession(): void&lt;div&gt;+ getSession(): Session&lt;/div&gt;&lt;div&gt;+ closeSession(): void&lt;/div&gt;&lt;div&gt;+ clearSessionObjects(): void&lt;/div&gt;&lt;div&gt;+ doAsTransaction(Supplier&amp;lt;T&amp;gt;):&amp;nbsp; Optional&amp;lt;T&amp;gt;&lt;/div&gt;&lt;div&gt;+ close(): void&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="SZ6bK4sAGu-eXTJ2Tl3F-9" vertex="1">
-          <mxGeometry y="70" width="270" height="98" as="geometry" />
-        </mxCell>
-        <mxCell id="SZ6bK4sAGu-eXTJ2Tl3F-13" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;TransactionService&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ doAsTransaction(Supplier&amp;lt;T&amp;gt;): Optional&amp;lt;T&amp;gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="496" y="90" width="260" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="0cVkY3dsmxr6A-1tmHjj-4" value="" style="endArrow=block;dashed=1;endFill=0;endSize=12;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" source="SZ6bK4sAGu-eXTJ2Tl3F-9" target="SZ6bK4sAGu-eXTJ2Tl3F-13" edge="1">
-          <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="626" y="280" as="sourcePoint" />
-            <mxPoint x="627.5" y="190" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="0cVkY3dsmxr6A-1tmHjj-5" value="with FileInfo as T" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="0cVkY3dsmxr6A-1tmHjj-4" vertex="1" connectable="0">
-          <mxGeometry x="-0.066" y="-1" relative="1" as="geometry">
+        <mxCell id="e1JNJbLfSPUfNoddy64d-2" value="with FileInfo as T&lt;div&gt;and String as ID&lt;/div&gt;" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="e1JNJbLfSPUfNoddy64d-1" target="e1JNJbLfSPUfNoddy64d-7">
+          <mxGeometry x="-0.005" width="160" relative="1" as="geometry">
+            <mxPoint x="690" y="181" as="sourcePoint" />
+            <mxPoint x="575" y="180" as="targetPoint" />
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="0cVkY3dsmxr6A-1tmHjj-6" value="1" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=bottom;rounded=0;exitX=0.993;exitY=0.412;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="SZ6bK4sAGu-eXTJ2Tl3F-8" target="SZ6bK4sAGu-eXTJ2Tl3F-9" edge="1">
-          <mxGeometry x="-1" y="3" relative="1" as="geometry">
-            <mxPoint x="336" y="383.5" as="sourcePoint" />
-            <mxPoint x="416" y="384" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="399" y="382" />
-              <mxPoint x="399" y="260" />
-              <mxPoint x="559" y="260" />
-            </Array>
+        <mxCell id="e1JNJbLfSPUfNoddy64d-7" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;i&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;b&gt;JpaRepository&amp;lt;T, ID&amp;gt;&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ findAll(Example&amp;lt;S&amp;gt;) : List&amp;lt;S&amp;gt;&lt;br&gt;&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="520" y="90" width="190" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="_sN3ZALpGs7qDctiAlAS-1" value="FileInfoRepository" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="215" width="270" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="_sN3ZALpGs7qDctiAlAS-2" value="- entityManager : EntityManager&lt;div&gt;- fileInfoJpaRepository : FileInfoJpaRepository&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="_sN3ZALpGs7qDctiAlAS-1">
+          <mxGeometry y="26" width="270" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="_sN3ZALpGs7qDctiAlAS-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="_sN3ZALpGs7qDctiAlAS-1">
+          <mxGeometry y="70" width="270" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="_sN3ZALpGs7qDctiAlAS-4" value="&lt;div&gt;&lt;div&gt;+ remove(FileInfo) : boolean&lt;/div&gt;&lt;div&gt;+ add(FileInfo) : Optional&amp;lt;FileInfo&amp;gt;&lt;/div&gt;&lt;div&gt;+ getDescendants(Path): List&amp;lt;FileInfo&amp;gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+ getDescendants(String): List&amp;lt;FileInfo&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+ findAll() : List&amp;lt;FileInfo&amp;gt;&lt;/div&gt;&lt;div&gt;+ findByPath(String): Optional&amp;lt;FileInfo&amp;gt;&lt;/div&gt;&lt;div&gt;+ getLargestFiles(String, int) : List&amp;lt;FileInfo&amp;gt;&lt;/div&gt;&lt;div&gt;+ changePathAndName(FileInfo, String) : Optional&amp;lt;FileInfo&amp;gt;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="_sN3ZALpGs7qDctiAlAS-1">
+          <mxGeometry y="78" width="270" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="Anj4gM-hNiiEgS3BTKTb-1" value="" style="endArrow=diamondThin;endFill=1;endSize=24;html=1;rounded=0;entryX=0.996;entryY=0.215;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryPerimeter=0;" edge="1" parent="1" source="e1JNJbLfSPUfNoddy64d-1" target="_sN3ZALpGs7qDctiAlAS-4">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="490" y="319" as="sourcePoint" />
+            <mxPoint x="700" y="310" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="xlPMYIOJiAvWWzjv780T-1" value="with FileInfo as T" style="endArrow=block;endSize=16;endFill=0;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="SZ6bK4sAGu-eXTJ2Tl3F-5" target="SZ6bK4sAGu-eXTJ2Tl3F-4">
+        <mxCell id="Anj4gM-hNiiEgS3BTKTb-6" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;EntityManager&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ remove(FileInfo) : void&lt;br&gt;&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ merge(FileInfo) : FileInfo&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="100" y="80" width="190" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Q_QHCKpZUpm1aOPRA9xj-1" value="" style="endArrow=diamondThin;endFill=1;endSize=24;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="Anj4gM-hNiiEgS3BTKTb-6" target="_sN3ZALpGs7qDctiAlAS-1">
           <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="416" y="290" as="sourcePoint" />
-            <mxPoint x="576" y="290" as="targetPoint" />
+            <mxPoint x="340" y="230" as="sourcePoint" />
+            <mxPoint x="500" y="230" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>

@@ -73,8 +73,7 @@ Wykorzystane technologie:
 - **Vite**
 
 Uruchomienie frontendu powinno być poprzedzone opisanymi wyżej komendami zdefiniowanymi w `build.gradle` i opisanymi punkcie ze sposobem uruchomienia projektu. 
-W przypadku nie utworzenia automatycznie w wyniku `./gradlew buildFrontend` pakietu node_modules w pakiecie frontend należy wykonać w folderze frontend komendę 
-`npm install`.
+W przypadku nie utworzenia automatycznie w wyniku `./gradlew buildFrontend` pakietu `node_modules` w pakiecie `frontend` należy wykonać komendę `npm install`.
 
 ### Schemat bazy danych
 
